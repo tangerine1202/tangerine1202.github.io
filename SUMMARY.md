@@ -1,7 +1,10 @@
 # Table of contents
 
 * [Overview](README.md)
-* [Privileged learning](privileged-learning.md)
+
+## 🚧 In Construction
+
+* [Privileged learning](in-construction/privileged-learning.md)
 
 ## Misc
 

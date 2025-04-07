@@ -15,7 +15,7 @@ This approach provides two advantages:
 
 ### **Methods**
 
-<figure><img src=".gitbook/assets/image (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (1).png" alt=""><figcaption></figcaption></figure>
 
 A privileged learning method typically consists of two components: a estimator and a policy. The policy is learned using privileged information, which contains rich features about the task. Policies can utilize this information to learn faster and perform better. However, since privileged information is not available in the real world, the policy cannot be directly deployed. This is where the estimator comes in. The estimator recovers privileged information from non-privileged data, allowing the policy to be deployed in real-world.
 
@@ -41,7 +41,7 @@ However, the performance of the policy and estimator is highly coupled. This res
 
 In this scenario, the policy may execute an undesired control sequence that would not occur with perfect state estimation, such as in stochastic dynamics.
 
-<figure><img src=".gitbook/assets/image.png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image.png" alt=""><figcaption></figcaption></figure>
 
 ### **Learn Jointly**
 
