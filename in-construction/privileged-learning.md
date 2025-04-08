@@ -4,6 +4,8 @@ description: '[🚧 work in progress] Review of the privileged learning in robot
 
 # Privileged learning
 
+### About
+
 Privileged learning is a sim2real approach that uses only the simulation environment and does not require real-world data collection.
 
 In privileged learning, information is divided into two types: privileged information and non-privileged information. Privileged information is difficult to obtain in the real world due to sensor limitations or costs, and it is only available in the simulation environment. Non-privileged information consists of data that can be collected in real-world production.
@@ -11,9 +13,9 @@ In privileged learning, information is divided into two types: privileged inform
 This approach provides two advantages:
 
 * Sim2real without real-world data
-  * Good interpretability due to the state estimation
+* Good interpretability due to the state estimation
 
-### **Methods**
+### **Method**
 
 <figure><img src="../.gitbook/assets/image (1).png" alt=""><figcaption></figcaption></figure>
 
