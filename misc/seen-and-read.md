@@ -6,7 +6,9 @@ description: 紀錄閱讀與觀影清單
 
 ### 2025
 
-* \[In progress] Every Page is Page One
+* 🔄 Probability of Machine Learning
+* ⏸️ Every Page is Page One
+* 0421  心（夏目漱石）
 
 ### 2024
 
