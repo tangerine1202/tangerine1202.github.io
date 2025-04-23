@@ -5,6 +5,7 @@
 ## 🚧 In Construction
 
 * [Privileged learning](in-construction/privileged-learning.md)
+* [Geodesic Distance for Rotation](in-construction/geodesic-distance-for-rotation.md)
 
 ## Misc
 
