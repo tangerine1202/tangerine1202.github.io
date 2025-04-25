@@ -16,3 +16,7 @@
 
 * [Letters](about/letters.md)
 * [About me](about/about-me.md)
+
+## Just-Ask-GPT
+
+* [Setup Static IP / DHCP with Netplan](just-ask-gpt/setup-static-ip-dhcp-with-netplan.md)
