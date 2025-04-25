@@ -22,9 +22,9 @@ $$
 
 **Implementation Details**
 
-*   Numerical stability
+*   **Numerical stability**
 
     To prevent invalid input of \arccos, we usually clamp the input to $$[-1+\epsilon, 1-\epsilon]$$.
-*   Squared geodesic loss
+*   **Squared geodesic loss**
 
     Seems to be a valid method, but I have not looks into it. Please search the references, see [pplx](https://www.perplexity.ai/search/geodesic-loss-gudj9luiRrSdFZPJhQmwFA).
