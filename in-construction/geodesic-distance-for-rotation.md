@@ -24,7 +24,7 @@ $$
 
 *   **Numerical stability**
 
-    To prevent invalid input of \arccos, we usually clamp the input to $$[-1+\epsilon, 1-\epsilon]$$.
+    To prevent invalid input of $$\arccos$$, we usually clamp the input to $$[-1+\epsilon, 1-\epsilon]$$.
 *   **Squared geodesic loss**
 
-    Seems to be a valid method, but I have not looks into it. Please search the references, see [pplx](https://www.perplexity.ai/search/geodesic-loss-gudj9luiRrSdFZPJhQmwFA).
+    This appears to be a valid method for smoothing loss at small values, but I haven't examined it further.
