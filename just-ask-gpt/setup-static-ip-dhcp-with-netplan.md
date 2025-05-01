@@ -6,7 +6,9 @@ description: >-
 
 # Setup Static IP / DHCP with Netplan
 
-> 💡 This is one of my quick-reference notes created for personal use and memorization. It includes only minimal explanations to highlight key concepts or procedures.
+{% hint style="info" %}
+This is one of my quick-reference notes created for personal use and memorization. It includes only minimal explanations to highlight key concepts or procedures.
+{% endhint %}
 
 To configure the static IP or DHCP on Ubuntu, modify the config in `/etc/netplan` and then `sudo netplan apply` to apply it.&#x20;
 

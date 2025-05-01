@@ -35,7 +35,7 @@ A rotation matrix is an orthogonal matrix, which means its column vectors are no
 
 </details>
 
-### **Visualizing**
+**Visualizing**
 
 If this concept seems abstract, try to imaging in this way: Imagine each column vector of a rotation matrix as an axis in a 3D coordinate system (like the x, y, and z axes). Since each column vector is normalized and orthogonal to the others, they form a coordinate frame. When we drop one axis (column vector), we can still determine exactly where it should be. It has to be perpendicular to the remaining axes and have unit length.
 
@@ -67,14 +67,30 @@ $$
 \bm {\hat{c}} = \text{normalize}(\bm a \times \bm b)
 $$
 
-This method is easy to understand. However, it cannot handle the non-uniqueness issue (see below for more detailed). If the non-uniqueness issue is a concern, you can use Gram-Schmidt process to ensure the result is a valid rotation matrix.
+This method is straightforward. However, the vectors $$\bm a$$ and $$\bm b$$ we begin with may not be perfectly orthonormal. We also need to ensure they are orthonormal to obtain a valid rotation matrix $$\hat{\bm R}$$.
 
-**Implementation**
+$$
+\begin{aligned}
+\hat{\bm a} &= \text{normalize}(\bm a)
+\\
+\hat{\bm c} &= \text{normalize}(\hat{\bm a} \times \bm b)
+\\
+\hat{\bm b} &= \text{normalize}(\hat{\bm c} \times \hat{\bm a})
+\end{aligned}
+$$
 
-{% code fullWidth="false" %}
+$$
+\hat{\mathbf R} = [\hat{\bm a}, \hat{\bm b}, \hat{\bm c}]
+$$
+
+<details>
+
+<summary>Implementation of Cross Product Method</summary>
+
+{% code fullWidth="true" %}
 ```python
 import numpy as np
-from scipy  .spatial.transform import Rotation
+from scipy.spatial.transform import Rotation
 
 # Generate a random 3D rotation matrix
 R = Rotation.random().as_matrix()
@@ -83,41 +99,61 @@ a = R[:, 0]
 b = R[:, 1]
 c = R[:, 2]
 
+# Ensure a is normalized
+a_hat = a / np.linalg.norm(a, ord=2)
+# Ensure c is orthonormal
 c_cross = np.cross(a, b)
 c_hat = c_cross / np.linalg.norm(c_cross, ord=2)
+# Ensure b is orthonormal to others
+b_cross = np.cross(c_hat, a)
+b_hat = b_cross / np.linalg.norm(b_cross, ord=2)
 
-is_all_close = np.allclose(c, c_hat)
-
-print(
-  f'all close: {is_all_close}',
-  f'        c: {c}',
-  f'    c_hat: {c_hat}',
-  sep='\n',
-)
+ab_inner = np.inner(a_hat, b_hat)
+ac_inner = np.inner(a_hat, c_hat)
+bc_inner = np.inner(b_hat, c_hat)
+assert np.isclose(ab_inner, 0) , f'a and b_hat is not orthogoal, {ab_inner=}'
+assert np.isclose(ac_inner, 0) , f'a and c_hat is not orthogoal, {ac_inner=}'
+assert np.isclose(bc_inner, 0) , f'b_hat and c_hat is not orthogoal, {bc_inner=}'
+assert np.linalg.norm(a_hat) == np.linalg.norm(b_hat) == np.linalg.norm(c_hat) == 1, \
+  f'some vectors are not unit_length'
 ```
 {% endcode %}
 
-### **Gram-Schmidt Orthogonalization Process**
 
-🚧 To be added…
+
+</details>
+
+### **Gram-Schmidt  Process**
+
+The Gram-Schmidt process is a generalized method for orthogonalization. It transforms a set of vectors with arbitrary dimensions into orthonormal vectors.
+
+Given a set of vectors $$\bm v_1, \dots, \bm v_n \in \R^n$$, it first constructs orthogonal vectors iteratively by removing components that are not orthogonal to previously orthogonalized vectors. This produces a set of orthogonal vectors $$\bm u_1, \dots, \bm u_n$$.
+
+$$
+\bm u_i = \bm v_i - \sum_{j=1}^{i-1} (\frac{\bm v_i \cdot \bm u_j}{\bm u_j \cdot \bm u_j}) \bm u_j
+$$
+
+where $$\cdot$$ denotes the inner product.
+
+Then, it normalizes all of them to obtain orthonormal vectors $$\bm e_1, \dots, \bm e_n$$ and constructs the rotation matrix $$\hat {\mathbf R}$$.
+
+$$
+\bm e_i = \frac{\bm u_i}{\| \bm u_i \|_2}\hat{\mathbf R} = [\bm e_1, \dots, \bm e_n]
+$$
 
 ## Non-uniqueness Issue
 
-PyTorch3D\[2,3] mentions that the 6D representation is not unique. This refers to case where the remaining columns vectors are not derived from a valid rotation matrix. For example, they may be not perfectly orthogonal or may not have unit-length.
+The 6D representation could be not unique\[2,3] when the remaining column vectors are not derived from a valid rotation matrix. For example, they may not be perfectly orthogonal to each other or may not have unit-length.
 
-The Gram-Schmidt process will correct these vectors. The non-uniqueness results from this process, since many invalid representations could be corrected to the same rotation matrix.
+The non-uniqueness happens during the orthogonalization process, since many invalid representations could be corrected to the same rotation matrix.
 
 **In Practical**
 
 In practical, this is not a major concern, since it corrects the imperfect output of the neural network and provides smooth optimization, which can be beneficial to work with neural networks.
 
-## Notes
+## **Further Reading**
 
-The original paper\[1] generalizes to $$n$$-dimensional rotation matrices, whose representation is an $$n \times (n-1)$$ matrix.
-
-**Further Reading**
-
-* **Gram-Schmidt orthogonalization** **process** to orthogonalize vectors with arbitrary dimensions.
+* The original paper\[1] generalizes to $$n$$-dimensional rotation matrices, whose representation is an $$n \times (n-1)$$ matrix.
 * **Stiefel manifold** ensures the continuity of this representation.
 
 ## References
