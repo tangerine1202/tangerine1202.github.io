@@ -141,7 +141,7 @@ $$
 \bm e_i = \frac{\bm u_i}{\| \bm u_i \|_2}\hat{\mathbf R} = [\bm e_1, \dots, \bm e_n]
 $$
 
-## Non-uniqueness Issue
+## Non-uniqueness
 
 The 6D representation could be not unique\[2,3] when the remaining column vectors are not derived from a valid rotation matrix. For example, they may not be perfectly orthogonal to each other or may not have unit-length.
 
