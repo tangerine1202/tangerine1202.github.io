@@ -1,7 +1,7 @@
 ---
 description: >-
-  This page explains 6D rotation representation, a continuous method for
-  parameterizing 3D rotations that is better for neural network to learni.
+  Introduces 6D rotation representation, a continuous method for parameterizing
+  3D rotations that is better for neural network to learni.
 ---
 
 # 6D Rotation Representation
