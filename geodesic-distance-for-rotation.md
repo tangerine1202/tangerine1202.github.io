@@ -27,4 +27,4 @@ $$
     To prevent invalid input of $$\arccos$$, we usually clamp the input to $$[-1+\epsilon, 1-\epsilon]$$.
 *   **Squared geodesic loss**
 
-    This appears to be a valid method for smoothing loss at small values, but I haven't examined it further.
+    🚧 This appears to be a valid method for smoothing loss at small values, but I haven't examined it further.

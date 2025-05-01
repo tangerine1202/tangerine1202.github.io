@@ -1,11 +1,12 @@
 # Table of contents
 
 * [Overview](README.md)
+* [6D Rotation Representation](6d-rotation-representation.md)
+* [Geodesic Distance for Rotation](geodesic-distance-for-rotation.md)
 
 ## 🚧 In Construction
 
 * [Privileged learning](in-construction/privileged-learning.md)
-* [Geodesic Distance for Rotation](in-construction/geodesic-distance-for-rotation.md)
 
 ## Misc
 
