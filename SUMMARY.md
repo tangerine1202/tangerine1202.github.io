@@ -1,8 +1,11 @@
 # Table of contents
 
-* [Overview](README.md)
-* [6D Rotation Representation](6d-rotation-representation.md)
-* [Geodesic Distance for Rotation](geodesic-distance-for-rotation.md)
+* [About me](README.md)
+
+## 3D CV
+
+* [6D Rotation Representation](3d-cv/6d-rotation-representation.md)
+* [Geodesic Distance for Rotation](3d-cv/geodesic-distance-for-rotation.md)
 
 ## 🚧 In Construction
 
@@ -10,14 +13,10 @@
 
 ## Misc
 
-* [Quality of Life Items](misc/quality-of-life-items.md)
 * [Seen & Read](misc/seen-and-read.md)
+* [Quality of Life Items](misc/quality-of-life-items.md)
+* [Letters](misc/letters.md)
 
-## About
+## Quick Note
 
-* [Letters](about/letters.md)
-* [About me](about/about-me.md)
-
-## Just-Ask-GPT
-
-* [Setup Static IP / DHCP with Netplan](just-ask-gpt/setup-static-ip-dhcp-with-netplan.md)
+* [Setup Static IP / DHCP with Netplan](quick-note/setup-static-ip-dhcp-with-netplan.md)
