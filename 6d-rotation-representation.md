@@ -1,7 +1,7 @@
 ---
 description: >-
-  Introduces 6D rotation representation, a continuous method for parameterizing
-  3D rotations that is better for neural network to learn.
+  Introduces 6D rotation representation, a continuous parameterization of 3D
+  rotations that is better for neural network to learn.
 ---
 
 # 6D Rotation Representation
@@ -11,11 +11,10 @@ description: >-
 * **Drop the last column vector** of the 3D rotation matrix to obtain the 6D rotation representation.
 * The resulting 6D matrix lies in a Stiefel manifold, which is **continuous**.
 * The rotation matrix is a orthogonal matrix, so if a column vector is dropped, it can be **recovered**.
-* The last column vector can be recovered with cross product for 3D rotation matrix or Gram-Schmidt process for generalized rotation matrices.
 
 ## Introduction
 
-The 6D rotation is a representation of 3D rotation matrix introduced in the paper\[1]. It features a **continuous** representation of rotation, and experiments showed it is **better for neural network to learn**, compared to commonly used Euler angles, axis-angle, and quaternion representations.
+The 6D rotation is a representation of 3D rotation introduced in the paper\[1]. It features a **continuous** representation of rotation, and experiments showed it is **better for neural network to learn**, compared to commonly used Euler angles, axis-angle, and quaternion representations.
 
 ### **Intuition**
 
@@ -37,7 +36,7 @@ A rotation matrix is an orthogonal matrix, which means its column vectors are no
 
 **Visualizing**
 
-If this concept seems abstract, try to imaging in this way: Imagine each column vector of a rotation matrix as an axis in a 3D coordinate system (like the x, y, and z axes). Since each column vector is normalized and orthogonal to the others, they form a coordinate frame. When we drop one axis (column vector), we can still determine exactly where it should be. It has to be perpendicular to the remaining axes and have unit length.
+If this concept seems abstract, try to imaging in this way: Imagine each column vector of a rotation matrix as an axis in a 3D coordinate frame (like the x, y, and z axes). Since each column vector is normalized and orthogonal to the others, they form a coordinate frame. When we drop one axis (column vector), we can still determine exactly where it should be. It has to be perpendicular to the remaining axes and have unit length.
 
 ### **Continuity**
 
