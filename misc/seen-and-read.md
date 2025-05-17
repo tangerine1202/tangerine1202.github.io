@@ -4,14 +4,14 @@ description: 紀錄閱讀與觀影清單
 
 # Seen & Read
 
-**In Porgress**
+**Pause**
 
-* 🔄 Probability of Machine Learning: An Introduction / Kevin P. Murphy
 * ⏸️ Every Page is Page One
 
 ### 2025
 
-* 📖 黑暗的左手 / 娥蘇拉·勒瑰恩
+* 📖 球形閃電 / 劉慈欣
+* 📖 0516 黑暗的左手 / 娥蘇拉·勒瑰恩
 * 📖 0508 呼吸 / 姜峯楠
 * 📖 0430 妳一生的預言 / 姜峯楠
 * 📖 0421  心 / 夏目漱石
@@ -26,8 +26,8 @@ description: 紀錄閱讀與觀影清單
 * 📖 直搗蜂窩的女孩
 * 📖 玩火的女孩
 * 📖 龍紋身的女孩
-* 📖 三體
-* 📖 香水
+* 📖 三體 / 劉慈欣
+* 📖 香水 / 徐四金
 
 ### Early
 

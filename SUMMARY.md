@@ -11,14 +11,15 @@
 
 * [Privileged learning](in-construction/privileged-learning.md)
 
+## Misc
+
+* [Habit Project](misc/habit-project.md)
+* [Seen & Read](misc/seen-and-read.md)
+* [Quality of Life Items](misc/quality-of-life-items.md)
+
 ## Quick Note
 
 * [Setup Static IP / DHCP with Netplan](just-ask-gpt/setup-static-ip-dhcp-with-netplan.md)
-
-## Misc
-
-* [Seen & Read](misc/seen-and-read.md)
-* [Quality of Life Items](misc/quality-of-life-items.md)
 
 ## About
 
