@@ -4,7 +4,7 @@ description: >-
   truly impressive works.
 ---
 
-# Media log
+# Media Log
 
 ### ⭐ **Highlight**
 
@@ -17,7 +17,7 @@ description: >-
 ### 2025
 
 * 📖 流浪地球 / 劉慈欣
-* 📖 0519 球形閃電 / 劉慈欣
+* 📖 0519 球狀閃電 / 劉慈欣
 * 📖 0516 黑暗的左手 / 娥蘇拉·勒瑰恩
 * 📖 0508 呼吸 / 姜峯楠
 * 📖 0430 妳一生的預言 / 姜峯楠
