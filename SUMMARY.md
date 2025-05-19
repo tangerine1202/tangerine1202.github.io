@@ -23,5 +23,5 @@
 
 ## About
 
-* [About me](about/about-me.md)
+* [CV](about/cv.md)
 * [Letters](about/letters.md)
