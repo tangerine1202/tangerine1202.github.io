@@ -14,7 +14,7 @@
 ## Misc
 
 * [Habit Project](misc/habit-project.md)
-* [Seen & Read](misc/seen-and-read.md)
+* [Media log](misc/media-log.md)
 * [Quality of Life Items](misc/quality-of-life-items.md)
 
 ## Quick Note
