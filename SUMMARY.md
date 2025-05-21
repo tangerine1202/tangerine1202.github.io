@@ -13,8 +13,8 @@
 
 ## Misc
 
-* [Habit Project](misc/habit-project.md)
 * [Media Log](misc/media-log.md)
+* [Habit Project](misc/habit-project.md)
 
 ## Quick Note
 
