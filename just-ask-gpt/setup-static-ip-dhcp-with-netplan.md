@@ -15,7 +15,7 @@ To configure the static IP or DHCP on Ubuntu, modify the config in `/etc/netplan
 1.  View all network interfaces on the machine
 
     ```bash
-    ip link show
+    ip a # or ip link show
     ```
 2. Netplan configuration files
    * Place at `/etc/netplan`
@@ -44,10 +44,10 @@ To configure the static IP or DHCP on Ubuntu, modify the config in `/etc/netplan
                dhcp6: false
          version: 2
        ```
-3.  Apply the new configurations
+3.  Try to apply the new configurations
 
     ```bash
-    sudo netplan apply
+    sudo netplan try
     ```
 4.  Check the current configuration
 
