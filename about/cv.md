@@ -1,4 +1,4 @@
-# About me
+# CV
 
 * Mail: [me@alans.dev](mailto:me@alans.dev)
 * GitHub: [github.com/tangerine1202](http://github.com/tangerine1202)
@@ -6,6 +6,7 @@
 
 **Work Experience**
 
+* Research Assistant / [Dept. of Computer Science](https://www.csie.ntu.edu.tw/), [National Taiwan University](https://www.ntu.edu.tw/) / 2025-02 - present
 * Student Researcher / [OMRON SINIC X](https://www.omron.com/sinicx/en/) at Tokyo / 2024-07 - present
 * Hackathon Organize / [2021 梅竹黑客松](https://2021.meichuhackathon.org/) / 2020-11 - 2021-11
 * Backend Engineer / 9Dynamics Inc. / 2020-07 - 2021-07
