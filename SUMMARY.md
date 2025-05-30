@@ -19,10 +19,7 @@
 ## Quick Note
 
 * [Setup Static IP / DHCP with Netplan](just-ask-gpt/setup-static-ip-dhcp-with-netplan.md)
-
-***
-
-* [Fix Long Boot Times Caused by Network Interface Timeout](fix-long-boot-times-caused-by-network-interface-timeout.md)
+* [Fix Long Boot Times Caused by Network Interface Timeout](quick-note/fix-long-boot-times-caused-by-network-interface-timeout.md)
 
 ## About
 
