@@ -16,6 +16,7 @@ description: >-
 
 ### 2025
 
+* 📖 Unlocking Japanese: Making Japanese as simple as it really is / Cure Dolly
 * 📖 艾西莫夫機器人故事全集 / 以撒·艾西莫夫（譯：葉李華）
 * 📖 0521 流浪地球 / 劉慈欣
 * 📖 0519 球狀閃電 / 劉慈欣
