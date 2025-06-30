@@ -16,7 +16,8 @@ description: >-
 
 ### 2025
 
-* 📖 艾西莫夫機器人故事全集 / 以撒·艾西莫夫（譯：葉李華）
+* 📖 我們的行為是怎樣被設計的 / 匡山（Cliff Kuang）, 羅伯‧法布坎（Robert Fabricant）
+* 📖 0630 藍色時期 15
 * 📖 0603 Unlocking Japanese: Making Japanese as simple as it really is / Cure Dolly
 * 📖 0521 流浪地球 / 劉慈欣
 * 📖 0519 球狀閃電 / 劉慈欣
@@ -49,4 +50,5 @@ description: >-
 
 ### **Pause**
 
+* ⏸️ 艾西莫夫機器人故事全集 / 以撒·艾西莫夫（譯：葉李華）
 * ⏸️ Every Page is Page One
