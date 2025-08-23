@@ -17,6 +17,7 @@ description: >-
 ### 2025
 
 * 📖 我們的行為是怎樣被設計的 / 匡山（Cliff Kuang）, 羅伯‧法布坎（Robert Fabricant）
+* 📖 0816 多情劍客無情劍 / 古龍
 * 📖 0630 藍色時期 15
 * 📖 0603 Unlocking Japanese: Making Japanese as simple as it really is / Cure Dolly
 * 📖 0521 流浪地球 / 劉慈欣
