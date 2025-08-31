@@ -9,13 +9,14 @@ description: >-
 ### ⭐ **Highlight**
 
 * 🎬 柏·本漢：我的隔離日記 (Bo Burnham: Inside)
-* 🎮 NieR: Automata
 * 🎬 喜劇開場
 * 🎵 鄭宜農
 * 🎵 raw book 1, 2 / 金車厘子&#x20;
+* 🎮 NieR: Automata
 
 ### 2025
 
+* 📖 哲學哲學雞蛋糕 / 朱家安
 * 📖 邊城浪子 / 古龍
 * 📖 0825 我們的行為是怎樣被設計的 / 匡山（Cliff Kuang）, 羅伯‧法布坎（Robert Fabricant）
 * 📖 0816 多情劍客無情劍 / 古龍
