@@ -16,8 +16,10 @@ description: >-
 
 ### 2025
 
+* 📖 Tiny Experiments: How to Live Freely in a Goal-Obsessed World / Anne-Laure Le Cunff
+* 📖 原則：生活和工作 / Ray Dalio
 * 📖 哲學哲學雞蛋糕 / 朱家安
-* 📖 邊城浪子 / 古龍
+* 📖 0914 邊城浪子 / 古龍
 * 📖 0825 我們的行為是怎樣被設計的 / 匡山（Cliff Kuang）, 羅伯‧法布坎（Robert Fabricant）
 * 📖 0816 多情劍客無情劍 / 古龍
 * 📖 0630 藍色時期 15
