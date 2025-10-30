@@ -1,5 +1,6 @@
 ---
 description: '[🚧 work in progress] Review of the privileged learning in robotics.'
+hidden: true
 ---
 
 # Privileged learning

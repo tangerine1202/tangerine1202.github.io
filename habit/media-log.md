@@ -6,14 +6,6 @@ description: >-
 
 # Media Log
 
-### ⭐ **Highlight**
-
-* 🎬 柏·本漢：我的隔離日記 (Bo Burnham: Inside)
-* 🎬 喜劇開場
-* 🎵 鄭宜農
-* 🎵 raw book 1, 2 / 金車厘子&#x20;
-* 🎮 NieR: Automata
-
 ### 2025
 
 * 📖 Tiny Experiments: How to Live Freely in a Goal-Obsessed World / Anne-Laure Le Cunff
@@ -58,3 +50,12 @@ description: >-
 
 * ⏸️ 艾西莫夫機器人故事全集 / 以撒·艾西莫夫（譯：葉李華）
 * ⏸️ Every Page is Page One
+
+### ⭐ **Highlight**
+
+* 🎮 Clair Obscur: Expedition 33
+* 🎵 raw book 1, 2 / 金車厘子&#x20;
+* 🎬 喜劇開場
+* 🎬 柏·本漢：我的隔離日記 (Bo Burnham: Inside)
+* 🎵 鄭宜農
+* 🎮 NieR: Automata
