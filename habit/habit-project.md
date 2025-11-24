@@ -1,3 +1,7 @@
+---
+hidden: true
+---
+
 # Habit Project
 
 * Linear Algebra (2025.3.20 - 2025.4.3)
