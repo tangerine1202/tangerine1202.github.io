@@ -6,6 +6,11 @@ description: >-
 
 # Media Log
 
+### 2026
+
+* 🇯🇵 新日檢完勝對策 N5
+* 🎓 Modern Robotics: Mechanics, Planning, and Control
+
 ### 2025
 
 * 📖 原則：生活和工作 / Ray Dalio
