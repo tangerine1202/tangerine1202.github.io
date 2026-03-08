@@ -8,8 +8,8 @@ description: >-
 
 ### 2026
 
-* 🇯🇵 新日檢完勝對策 N5
-* 🎓 Modern Robotics: Mechanics, Planning, and Control
+* 🇯🇵 0309 新日檢完勝對策 N5
+* 🎓 0301 Modern Robotics: Mechanics, Planning, and Control
 
 ### 2025
 
