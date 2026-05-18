@@ -8,20 +8,20 @@ description: >-
 
 ### 2026
 
-* 🇯🇵 0309 新日檢完勝對策 N5
-* 🎓 0301 Modern Robotics: Mechanics, Planning, and Control
+* 🇯🇵 Japanese Grammar Guide / Tae Kim
+* 📖 0416 雪山飛狐 / 金庸
+* 🇯🇵 0309 新日檢完勝對策 N5 / 佐佐木仁子, 松本紀子
+* 🎓 0301 Modern Robotics: Mechanics, Planning, and Control / Kevin M. Lynch and Frank C. Park
 
 ### 2025
 
-* 📖 原則：生活和工作 / Ray Dalio
 * 📖 哲學哲學雞蛋糕 / 朱家安
 * 📖 1123 Tiny Experiments: How to Live Freely in a Goal-Obsessed World / Anne-Laure Le Cunff
 * 📖 1007 倚天屠龍記 / 金庸
 * 📖 0914 邊城浪子 / 古龍
 * 📖 0825 我們的行為是怎樣被設計的 / 匡山（Cliff Kuang）, 羅伯‧法布坎（Robert Fabricant）
 * 📖 0816 多情劍客無情劍 / 古龍
-* 📖 0630 藍色時期 15
-* 📖 0603 Unlocking Japanese: Making Japanese as simple as it really is / Cure Dolly
+* 🇯🇵 0603 Unlocking Japanese: Making Japanese as simple as it really is / Cure Dolly
 * 📖 0521 流浪地球 / 劉慈欣
 * 📖 0519 球狀閃電 / 劉慈欣
 * 📖 0516 黑暗的左手 / 娥蘇拉·勒瑰恩
@@ -53,8 +53,9 @@ description: >-
 
 ### **Pause**
 
-* ⏸️ 艾西莫夫機器人故事全集 / 以撒·艾西莫夫（譯：葉李華）
-* ⏸️ Every Page is Page One
+* 📖 原則：生活和工作 / Ray Dalio
+* 📖 艾西莫夫機器人故事全集 / 以撒·艾西莫夫（譯：葉李華）
+* 📖 Every Page is Page One
 
 ### ⭐ **Highlight**
 
