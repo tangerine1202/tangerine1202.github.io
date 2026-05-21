@@ -8,6 +8,7 @@ description: >-
 
 ### 2026
 
+* 📖 How to Take Smart Notes / Sönke Ahrens
 * 🇯🇵 Japanese Grammar Guide / Tae Kim
 * 📖 0416 雪山飛狐 / 金庸
 * 🇯🇵 0309 新日檢完勝對策 N5 / 佐佐木仁子, 松本紀子
