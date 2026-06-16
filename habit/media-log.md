@@ -61,9 +61,9 @@ description: >-
 
 ### ⭐ **Highlight**
 
-* 🎮 Clair Obscur: Expedition 33
-* 🎵 raw book 1, 2 / 金車厘子&#x20;
 * 🎬 喜劇開場
 * 🎬 柏·本漢：我的隔離日記 (Bo Burnham: Inside)
 * 🎵 鄭宜農
+* 🎵 raw book 1, 2 / 金車厘子&#x20;
 * 🎮 NieR: Automata
+* 🎮 Clair Obscur: Expedition 33
