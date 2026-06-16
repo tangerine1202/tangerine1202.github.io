@@ -9,7 +9,7 @@ description: >-
 ### 2026
 
 * 🇯🇵 Japanese Grammar Guide / Tae Kim
-* 📖 A System for Writing: How an Unconventional Approach to Note-Making Can Help You Capture Ideas, Think Wildly, and Write Constantly - A Zettelkasten Primer / Bob Doto
+* 📖 0616 A System for Writing: How an Unconventional Approach to Note-Making Can Help You Capture Ideas, Think Wildly, and Write Constantly - A Zettelkasten Primer / Bob Doto
 * 📖 0526 How to Take Smart Notes: One Simple Technique to Boost Writing, Learning and Thinking / Sönke Ahrens
 * 📖 0416 雪山飛狐 / 金庸
 * 🇯🇵 0309 新日檢完勝對策 N5 / 佐佐木仁子, 松本紀子
