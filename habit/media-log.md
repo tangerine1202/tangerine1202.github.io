@@ -8,6 +8,7 @@ description: >-
 
 ### 2026
 
+* 🎬 0628 魔法公主 / 宮崎駿
 * 🇯🇵 Japanese Grammar Guide / Tae Kim
 * 📖 0616 A System for Writing: How an Unconventional Approach to Note-Making Can Help You Capture Ideas, Think Wildly, and Write Constantly - A Zettelkasten Primer / Bob Doto
 * 📖 0526 How to Take Smart Notes: One Simple Technique to Boost Writing, Learning and Thinking / Sönke Ahrens
@@ -63,6 +64,7 @@ description: >-
 
 * 🎬 喜劇開場
 * 🎬 柏·本漢：我的隔離日記 (Bo Burnham: Inside)
+* 🎬 魔法公主
 * 🎵 鄭宜農
 * 🎵 raw book 1, 2 / 金車厘子&#x20;
 * 🎮 NieR: Automata
