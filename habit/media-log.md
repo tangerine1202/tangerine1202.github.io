@@ -8,7 +8,7 @@ description: >-
 
 ### 2026
 
-* 🎬 0727 跟蹤 / Stephen Nolan
+* 🎬 0728 跟蹤 / Stephen Nolan
 * 🎬 0728 箱の中の羊 / 是枝裕和
 * 🎬 0727 奧德賽 / Stephen Nolan
 * 📖 0712 再見繪梨 / 藤本樹
