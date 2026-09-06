@@ -9,8 +9,8 @@ description: >-
 ### 2026
 
 * 📖 The Non-Designer's Design Book / Robin Williams
-* 📖 青瓷 / 有吉佐和子
 * 📖 脱力、台湾式。 24年暮らして学んだ、ゆるく楽しく、幸せな生き方 / 青木由香
+* 📖 0906 青瓷 / 有吉佐和子
 * 🎬 0814 吉伊卡哇 人魚島的秘密
 * 🎬 0728 小丑 / 瓦昆·菲尼克斯
 * 🎬 0727 跟蹤 / Stephen Nolan
