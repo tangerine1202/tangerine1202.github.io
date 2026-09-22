@@ -1,0 +1,125 @@
+/* Meanwhile — Almanac motion.
+   The ribbon never leaves the screen; the bracket on it is what moves. Zooming into time narrows the
+   bracket, zooming out widens it. Everything else only answers a click, except one moment: the year
+   forming on the Year page. Published as motion.css in the almanac build. */
+
+/* The bracket follows scrolling (ribbon.js adds .rb-ready after the first frame). */
+.rb-ready .rb-window { transition: left .45s cubic-bezier(.22, .8, .24, 1), width .45s cubic-bezier(.22, .8, .24, 1); }
+
+@media (prefers-reduced-motion: no-preference) {
+
+  @view-transition { navigation: auto; }
+
+  :root {
+    --ease: cubic-bezier(.22, .8, .24, 1);
+    --ease-in: cubic-bezier(.45, 0, .8, .45);
+    --sx: 24px;
+  }
+
+  /* ── fixed names ─────────────────────────────────── */
+  .top { view-transition-name: header; }
+  .nav .mark { view-transition-name: nav-mark; }
+  .ribbon { view-transition-name: ribbon; }
+  .rb-window { view-transition-name: rb-window; }
+
+  ::view-transition-group(*) { animation-duration: .5s; animation-timing-function: var(--ease); }
+  ::view-transition-group(header) { animation: none; }
+  ::view-transition-old(header) { display: none; }
+  ::view-transition-new(header) { animation: none; }
+
+  /* The ribbon stays where it is; only what's lit on it changes (a Context page dims the rest). */
+  ::view-transition-group(ribbon) { animation: none; }
+  ::view-transition-old(ribbon) { animation: vt-fade-out .4s linear both; }
+  ::view-transition-new(ribbon) { animation: vt-fade-in .4s linear both; }
+  /* Leaving Home, the line of days rises into place; returning to Home, it sinks away. */
+  ::view-transition-new(ribbon):only-child { animation: rb-rise .6s var(--ease) both; }
+  ::view-transition-old(ribbon):only-child { animation: rb-sink .34s var(--ease-in) both; }
+
+  /* The bracket: the one thing that visibly travels on every navigation. */
+  ::view-transition-group(rb-window) { animation-duration: .66s; animation-timing-function: cubic-bezier(.3, .85, .2, 1); }
+  ::view-transition-new(rb-window):only-child { animation: vt-fade-in .3s .3s both; }
+  ::view-transition-old(rb-window):only-child { animation: vt-fade-out .2s both; }
+
+  @keyframes rb-rise { from { transform: translateY(100%); } }
+  @keyframes rb-sink { to { transform: translateY(100%); } }
+
+  /* ── page level ──────────────────────────────────── */
+
+  @keyframes vt-fade-out { to { opacity: 0; } }
+  @keyframes vt-fade-in { from { opacity: 0; } }
+  @keyframes vt-grow-out { to { opacity: 0; transform: scale(1.025); } }
+  @keyframes vt-grow-in { from { opacity: 0; transform: scale(.975); } }
+  @keyframes vt-shrink-out { to { opacity: 0; transform: scale(.975); } }
+  @keyframes vt-shrink-in { from { opacity: 0; transform: scale(1.025); } }
+  @keyframes vt-slide-out { to { opacity: 0; transform: translateX(calc(var(--sx) * -1)); } }
+  @keyframes vt-slide-in { from { opacity: 0; transform: translateX(var(--sx)); } }
+  @keyframes vt-recede { to { opacity: 0; transform: scale(.99); } }
+
+  ::view-transition-old(root) { animation: vt-fade-out .24s var(--ease-in) both; }
+  ::view-transition-new(root) { animation: vt-fade-in .42s .06s var(--ease) both; }
+
+  html[data-vt="zoom-in"]::view-transition-old(root) { animation: vt-grow-out .32s var(--ease-in) both; }
+  html[data-vt="zoom-in"]::view-transition-new(root) { animation: vt-grow-in .54s .06s var(--ease) both; }
+  html[data-vt="zoom-out"]::view-transition-old(root) { animation: vt-shrink-out .32s var(--ease-in) both; }
+  html[data-vt="zoom-out"]::view-transition-new(root) { animation: vt-shrink-in .54s .06s var(--ease) both; }
+
+  /* Days move the same way the ribbon runs: later days come in from the right. */
+  html[data-vt="thread"][data-vt-dir="back"] { --sx: -24px; }
+  html[data-vt="day-next"] { --sx: 40px; }
+  html[data-vt="day-prev"] { --sx: -40px; }
+  html[data-vt="thread"]::view-transition-old(root),
+  html[data-vt^="day-"]::view-transition-old(root) { animation: vt-slide-out .28s var(--ease-in) both; }
+  html[data-vt="thread"]::view-transition-new(root),
+  html[data-vt^="day-"]::view-transition-new(root) { animation: vt-slide-in .5s .05s var(--ease) both; }
+
+  html[data-vt="morph"]::view-transition-old(root) { animation: vt-recede .28s var(--ease-in) both; }
+  html[data-vt="morph"]::view-transition-new(root) { animation: vt-fade-in .42s .14s var(--ease) both; }
+
+  /* ── shared elements (named by transitions.js, only for this navigation) ── */
+
+  /* Cell → Page: the empty plate grows into the leaf, the numeral grows into the big date. */
+  ::view-transition-group(vt-day) { animation-duration: .56s; }
+  ::view-transition-old(vt-day) { animation: vt-fade-out .22s linear both; }
+  ::view-transition-new(vt-day) { animation: vt-fade-in .28s linear both; }
+  ::view-transition-group(vt-date) { animation-duration: .58s; }
+  ::view-transition-old(vt-date) { animation: vt-fade-out .2s linear both; }
+  ::view-transition-new(vt-date) { animation: vt-fade-in .3s .08s linear both; }
+  ::view-transition-group(*.dot) { animation-duration: .64s; animation-timing-function: cubic-bezier(.3, .9, .3, 1); }
+
+  /* Text → Trace */
+  ::view-transition-group(ctx-title) { animation-duration: .58s; }
+  ::view-transition-old(ctx-title) { animation: vt-fade-out .18s linear both; }
+  ::view-transition-new(ctx-title) { animation: vt-fade-in .34s .12s linear both; }
+  ::view-transition-group(ctx-dot) { animation-duration: .6s; }
+
+  /* Entries → Thread */
+  ::view-transition-group(*.ent) { animation-duration: .6s; }
+  ::view-transition-old(*.ent) { animation: vt-fade-out .24s linear both; }
+  ::view-transition-new(*.ent) { animation: vt-fade-in .34s .1s linear both; }
+
+  /* ── Dots → Line, step one: before leaving, one context lights up everywhere, ribbon included ── */
+
+  /* Kept brief: a glance at what lights up, then straight on to the Context page. */
+  :root { --vt-focus-hold: 150; }
+  .focusing [data-cid] { transition: opacity .14s var(--ease), transform .14s var(--ease); }
+  .focusing [data-cid]:not(.lit) { opacity: .16; }
+  .focusing .dot.lit, .focusing .weeks .cell.lit { transform: scale(1.4); }
+
+  /* ── page-load moments: a year's lanes drawing, a context's days forming ── */
+
+  @keyframes vt-draw { from { clip-path: inset(0 100% 0 0); } to { clip-path: inset(0 0 0 0); } }
+  @keyframes vt-cell { from { opacity: 0; transform: scale(.3); } }
+
+  html.enter .p-year .lane svg { animation: vt-draw .9s var(--ease) both; animation-delay: calc(var(--i, 0) * 60ms + .15s); }
+  html.enter .p-context .weeks .cell:not(.out) { animation: vt-cell .4s var(--ease) both; animation-delay: calc(var(--w, 0) * 11ms + .3s); }
+
+  /* ── scroll-driven: Home photos open beside the words (Chrome, Safari 26+) ── */
+
+  @supports (animation-timeline: view()) {
+    @keyframes vt-unfold-r { from { clip-path: inset(0 80% 0 0); } to { clip-path: inset(0 0 0 0); } }
+    @keyframes vt-unfold-c { from { clip-path: inset(0 40% 0 40%); } to { clip-path: inset(0 0 0 0); } }
+    .post .frame { animation: vt-unfold-r linear both; animation-timeline: view(); animation-range: entry 0% entry 90%; }
+    .l-center .frame { animation-name: vt-unfold-c; }
+    .l-pair .photo + .photo .frame { animation-range: entry 15% entry 100%; }
+  }
+}

@@ -1,0 +1,129 @@
+/* Meanwhile — motion layer.
+   Loaded only in the motion build. Delete this file and the inline script and the site still works.
+   Everything sits inside no-preference: with "reduce motion" on, pages switch instantly. */
+
+@media (prefers-reduced-motion: no-preference) {
+
+  @view-transition { navigation: auto; }
+
+  :root {
+    --ease: cubic-bezier(.22, .8, .24, 1);
+    --ease-in: cubic-bezier(.45, 0, .8, .45);
+    --sx: 28px;
+  }
+
+  /* ── fixed names ─────────────────────────────────── */
+  /* The header stays put; only the underline under the current section travels. */
+  .top { view-transition-name: header; }
+  .nav .mark { view-transition-name: nav-mark; }
+
+  ::view-transition-group(*) { animation-duration: .52s; animation-timing-function: var(--ease); }
+  ::view-transition-group(header) { animation: none; }
+  ::view-transition-old(header) { display: none; }
+  ::view-transition-new(header) { animation: none; }
+
+  /* ── page level: the root snapshot is the viewport, so scale/slide happens around what you see ── */
+
+  @keyframes vt-fade-out { to { opacity: 0; } }
+  @keyframes vt-fade-in { from { opacity: 0; } }
+  @keyframes vt-grow-out { to { opacity: 0; transform: scale(1.045); } }
+  @keyframes vt-grow-in { from { opacity: 0; transform: scale(.955); } }
+  @keyframes vt-shrink-out { to { opacity: 0; transform: scale(.955); } }
+  @keyframes vt-shrink-in { from { opacity: 0; transform: scale(1.045); } }
+  @keyframes vt-slide-out { to { opacity: 0; transform: translateX(calc(var(--sx) * -1)); } }
+  @keyframes vt-slide-in { from { opacity: 0; transform: translateX(var(--sx)); } }
+  @keyframes vt-recede { to { opacity: 0; transform: scale(.985); } }
+
+  /* fade (default) */
+  ::view-transition-old(root) { animation: vt-fade-out .26s var(--ease-in) both; }
+  ::view-transition-new(root) { animation: vt-fade-in .44s .06s var(--ease) both; }
+
+  /* Zoom in: deeper into time (Home › Year › Calendar › Log › Day) */
+  html[data-vt="zoom-in"]::view-transition-old(root) { animation: vt-grow-out .34s var(--ease-in) both; }
+  html[data-vt="zoom-in"]::view-transition-new(root) { animation: vt-grow-in .56s .04s var(--ease) both; }
+
+  /* Zoom out: a wider span of time */
+  html[data-vt="zoom-out"]::view-transition-old(root) { animation: vt-shrink-out .34s var(--ease-in) both; }
+  html[data-vt="zoom-out"]::view-transition-new(root) { animation: vt-shrink-in .56s .04s var(--ease) both; }
+
+  /* Thread: sideways along a context; going back reverses the direction */
+  html[data-vt="thread"][data-vt-dir="back"] { --sx: -28px; }
+  html[data-vt="day-next"] { --sx: 44px; }
+  html[data-vt="day-prev"] { --sx: -44px; }
+  html[data-vt="thread"]::view-transition-old(root),
+  html[data-vt^="day-"]::view-transition-old(root) { animation: vt-slide-out .3s var(--ease-in) both; }
+  html[data-vt="thread"]::view-transition-new(root),
+  html[data-vt^="day-"]::view-transition-new(root) { animation: vt-slide-in .5s .05s var(--ease) both; }
+
+  /* Morph: the page recedes a little while the cell becomes the Day card */
+  html[data-vt="morph"]::view-transition-old(root) { animation: vt-recede .3s var(--ease-in) both; }
+  html[data-vt="morph"]::view-transition-new(root) { animation: vt-fade-in .42s .14s var(--ease) both; }
+
+  /* ── shared elements ─────────────────────────────── */
+
+  /* Cell → Page. The plate is an empty box, so growing it never stretches any text. */
+  ::view-transition-group(vt-day) { animation-duration: .56s; }
+  ::view-transition-old(vt-day) { animation: vt-fade-out .22s linear both; }
+  ::view-transition-new(vt-day) { animation: vt-fade-in .28s linear both; }
+
+  /* The date number keeps its proportions while it grows; old and new cross quickly. */
+  ::view-transition-group(vt-date) { animation-duration: .56s; }
+  ::view-transition-old(vt-date) { animation: vt-fade-out .2s linear both; }
+  ::view-transition-new(vt-date) { animation: vt-fade-in .3s .08s linear both; }
+
+  /* Dots arrive a beat after the card, as if settling into their groups. */
+  ::view-transition-group(*.dot) { animation-duration: .64s; animation-timing-function: cubic-bezier(.3, .9, .3, 1); }
+
+  /* Text → Trace. The words differ ("準備求職" → "Job Preparation"): let the old go early. */
+  ::view-transition-group(ctx-title) { animation-duration: .58s; }
+  ::view-transition-old(ctx-title) { animation: vt-fade-out .18s linear both; }
+  ::view-transition-new(ctx-title) { animation: vt-fade-in .34s .12s linear both; }
+  ::view-transition-group(ctx-dot) { animation-duration: .6s; }
+
+  /* Entries → Thread: the lines of one context gather into the Context page. */
+  ::view-transition-group(*.ent) { animation-duration: .6s; }
+  ::view-transition-old(*.ent) { animation: vt-fade-out .24s linear both; }
+  ::view-transition-new(*.ent) { animation: vt-fade-in .34s .1s linear both; }
+
+  /* ── Dots → Line, step one (before leaving) ─────── */
+
+  .focusing [data-cid] { transition: opacity .28s var(--ease), transform .28s var(--ease), filter .28s; }
+  .focusing [data-cid]:not(.lit) { opacity: .16; }
+  .focusing .dot.lit { transform: scale(1.5); }
+  .focusing .weeks .cell.lit { transform: scale(1.25); }
+
+  /* ── entrances: play on the live new page, during or without a transition ── */
+
+  @keyframes vt-draw { from { clip-path: inset(0 100% 0 0); } to { clip-path: inset(0 0 0 0); } }
+  @keyframes vt-cell { from { opacity: 0; transform: scale(.4); } }
+  @keyframes vt-settle { from { opacity: 0; } }
+
+  /* Year: each lane is drawn left to right, one after another… */
+  html.enter .lane svg,
+  html.enter .trace svg { animation: vt-draw .95s var(--ease) both; animation-delay: calc(var(--i, 0) * 70ms + .16s); }
+  /* …then the 365 days form, week by week. */
+  html.enter .weeks .cell:not(.out) { animation: vt-cell .38s var(--ease) both; animation-delay: calc(var(--w, 0) * 12ms + .45s); }
+
+  /* Day: entries settle in after the card has opened (the dots are already travelling). */
+  html.enter .sheet .grp .cn,
+  html.enter .sheet .grp .ents { animation: vt-settle .5s var(--ease) both; animation-delay: calc(var(--i, 0) * 55ms + .26s); }
+  html.enter .sheet .pn { animation: vt-settle .5s .4s var(--ease) both; }
+
+  /* ── scroll-driven (Chrome, Safari 26+) ──────────── */
+
+  @supports (animation-timeline: view()) {
+    @keyframes vt-unfold-r { from { clip-path: inset(0 80% 0 0); } to { clip-path: inset(0 0 0 0); } }
+    @keyframes vt-unfold-c { from { clip-path: inset(0 40% 0 40%); } to { clip-path: inset(0 0 0 0); } }
+    @keyframes vt-text-shift { from { transform: translateX(14px); } to { transform: none; } }
+    @keyframes vt-pass { from { opacity: .3; transform: scale(.7); } }
+
+    /* Home: the photo opens beside the words like a spread being unfolded (20% → 100%). */
+    .post .frame { animation: vt-unfold-r linear both; animation-timeline: view(); animation-range: entry 0% entry 90%; }
+    .l-center .frame { animation-name: vt-unfold-c; }
+    .l-pair .photo + .photo .frame { animation-range: entry 15% entry 100%; }
+    .l-side .text, .l-wide .text { animation: vt-text-shift linear both; animation-timeline: view(); animation-range: entry 0% entry 80%; }
+
+    /* Context: each day's dots light up as it passes into view. */
+    .p-context .row .dots { animation: vt-pass linear both; animation-timeline: view(); animation-range: entry 0% cover 30%; }
+  }
+}

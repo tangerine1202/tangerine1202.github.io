@@ -6,3 +6,10 @@ node_modules/
 public/
 .deploy*/
 _multiconfig.yml
+
+# Meanwhile: content/ (the daily log, the media log, posts, photos) is private and stays on the
+# server; only the code is in git. npm run sync copies the logs in from the vault.
+content/
+dist/
+dist-motion/
+dist-almanac/

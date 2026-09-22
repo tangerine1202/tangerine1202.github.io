@@ -1,0 +1,13 @@
+{
+  "name": "meanwhile",
+  "private": true,
+  "type": "module",
+  "description": "A visual archive of how I spent my time.",
+  "engines": { "node": ">=20" },
+  "scripts": {
+    "build": "node build.mjs",
+    "dev": "node serve.mjs",
+    "sync": "node sync.mjs",
+    "test": "node --test test/*.test.mjs"
+  }
+}

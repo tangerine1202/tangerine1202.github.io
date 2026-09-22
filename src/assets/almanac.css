@@ -1,0 +1,401 @@
+/* Meanwhile — Almanac.
+   A second visual identity. Every data page is a window onto one continuous line of days: the ribbon
+   at the bottom. Dates, counts and month names live in a left margin, like an almanac's marginalia.
+   Replaces style.css in the almanac build (published as style.css). */
+
+:root {
+  --paper: #F4F5F2;
+  --leaf: #FCFCFA;
+  --ink: #1B1E27;
+  --pencil: #676C77;
+  --faint: #A9ADB4;
+  --grid: #DCDFDA;
+  --empty: #E6E8E4;
+  --sans: "Schibsted Grotesk", -apple-system, BlinkMacSystemFont, "PingFang TC", "Noto Sans TC", sans-serif;
+  --serif: "Newsreader", "Songti TC", "Noto Serif TC", Georgia, serif;
+  --max: 1040px;
+  --margin: 200px;
+  --gap: 48px;
+  --indent: calc(var(--margin) + var(--gap));
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+html { background: var(--paper); color: var(--ink); -webkit-text-size-adjust: 100%; }
+body { margin: 0; font: 16px/1.6 var(--sans); overflow-x: hidden; }
+body.has-ribbon { padding-bottom: 76px; }
+a { color: inherit; text-decoration: none; }
+:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; border-radius: 2px; }
+[hidden] { display: none !important; }
+ul { list-style: none; margin: 0; padding: 0; }
+h1, h2, h3 { font-weight: 500; margin: 0; }
+
+.wrap { max-width: calc(var(--max) + 48px); margin-inline: auto; padding-inline: 24px; }
+
+/* ── frame ─────────────────────────────────────────── */
+
+.top {
+  display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline;
+  gap: 8px 24px; padding-block: 28px 0;
+}
+.brand { font: italic 400 25px/1 var(--serif); letter-spacing: -.01em; }
+.nav { display: flex; gap: 22px; font-size: 15px; }
+.nav a { position: relative; padding-bottom: 5px; color: var(--pencil); transition: color .2s; }
+.nav a:hover, .nav a[aria-current] { color: var(--ink); }
+.nav .mark { position: absolute; left: 0; right: 0; bottom: 0; height: 2px; border-radius: 1px; background: var(--ink); }
+
+main { min-height: 60vh; }
+
+.foot { margin-top: 128px; padding-block: 0 44px; color: var(--pencil); font: italic 17px/1.5 var(--serif); }
+.foot p { margin: 0 0 0 var(--indent); }
+
+/* ── shared pieces ─────────────────────────────────── */
+
+.page-title {
+  font: 500 clamp(40px, 6vw, 60px)/1 var(--sans); letter-spacing: -.035em;
+  margin: 72px 0 24px var(--indent);
+}
+.label, .kicker { font: italic 400 17px/1.35 var(--serif); color: var(--pencil); margin: 0; }
+.quiet-note { color: var(--pencil); font: italic 17px var(--serif); }
+
+.dot {
+  display: inline-block; flex: none; width: 8px; height: 8px; border-radius: 50%;
+  background: var(--c, var(--faint)); vertical-align: middle;
+}
+
+.legend { display: flex; flex-wrap: wrap; gap: 6px 18px; margin: 0 0 48px; font-size: 14px; color: var(--pencil); }
+.legend > * { display: inline-flex; align-items: center; gap: 7px; }
+.legend a:hover { color: var(--ink); }
+
+.ents { font-size: 16px; line-height: 1.6; }
+.ents > li + li { margin-top: 6px; }
+.ents .sub { margin: 6px 0 4px; font-size: 14px; color: var(--pencil); }
+.ents .sub li { position: relative; padding-left: calc((var(--d, 1) - 1) * 18px + 16px); }
+.ents .sub li::before {
+  content: ""; position: absolute; top: .72em; left: calc((var(--d, 1) - 1) * 18px + 3px);
+  width: 4px; height: 4px; border-radius: 50%; background: var(--faint);
+}
+.cn:hover { text-decoration: underline; text-underline-offset: 3px; text-decoration-thickness: 1px; }
+
+/* Date block (Log + Context): a big numeral, the month beside it, the weekday as a note. */
+.d { position: relative; display: flex; flex-direction: column; align-items: flex-start; align-self: start; }
+.d > * { position: relative; }
+.d .plate { position: absolute; inset: -12px -16px; border-radius: 5px; transition: background-color .2s; }
+.d:hover .plate { background: var(--leaf); }
+.d .dd { display: flex; align-items: baseline; gap: 8px; }
+.d .dn { order: -1; display: inline-block; font: 500 40px/1 var(--sans); letter-spacing: -.045em; font-variant-numeric: tabular-nums; }
+.d .mo { font-size: 15px; color: var(--pencil); }
+.d .wd { margin-top: 4px; font: italic 15px/1.3 var(--serif); color: var(--pencil); }
+.d .dots { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 10px; }
+
+/* Distribution line: one tick per day (Year lanes, Context traces). */
+svg .base { fill: var(--grid); }
+/* Days that haven't happened yet: a dashed line, not nothing. */
+svg .future { stroke: var(--faint); stroke-width: 1px; stroke-dasharray: 3 4; }
+.axis { position: relative; height: 16px; }
+.axis span { position: absolute; top: 0; font-size: 12px; line-height: 16px; color: var(--pencil); }
+
+/* ── Home ──────────────────────────────────────────── */
+
+/* Home is the one page without the margin column: when it was written sits above the title, in small type. */
+.post { padding-top: 104px; }
+.post:first-child { padding-top: 64px; }
+.post .kicker { margin: 0 0 14px; font: 400 14px/1.4 var(--sans); color: var(--pencil); }
+/* Home titles are set in the serif: the one page that is written, not recorded. */
+.post .title {
+  max-width: 16em; margin: 0 0 28px;
+  font: 400 clamp(36px, 5.4vw, 60px)/1.08 var(--serif); letter-spacing: -.015em; text-wrap: balance;
+}
+.prose p { max-width: 32em; margin: 0 0 1em; font: 400 19px/1.78 var(--serif); }
+.lk { border-bottom: 2px solid var(--c); transition: background-color .2s; }
+.lk:hover { background-color: color-mix(in srgb, var(--c) 14%, transparent); }
+/* A link off the site: the same underline, in pencil, because it leads away from the record. */
+.ext { border-bottom: 1px solid var(--pencil); transition: border-color .2s; }
+.ext:hover { border-color: var(--ink); }
+
+.post .photos { margin-top: 44px; }
+.photo { margin: 0; }
+.frame { aspect-ratio: 3 / 2; overflow: hidden; border-radius: 3px; background: var(--empty); }
+.photo.portrait .frame { aspect-ratio: 4 / 5; }
+.photo.square .frame { aspect-ratio: 1; }
+/* The whole photo, never cropped: what doesn't fill the frame leaves the frame's own grey around it. */
+.frame img { display: block; width: 100%; height: 100%; object-fit: contain; }
+/* Placeholder: dot-grid paper, the same material as everything else here. */
+.frame.ph {
+  display: grid; place-items: center;
+  background: radial-gradient(circle, #CDD1CB 1.1px, transparent 1.5px) 0 0 / 14px 14px, var(--empty);
+}
+.ph-label { padding: 2px 8px; background: var(--empty); font: italic 15px var(--serif); color: var(--pencil); }
+.photo figcaption { margin-top: 10px; font: italic 15px/1.4 var(--serif); color: var(--pencil); }
+
+.l-side { display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); gap: 64px; align-items: center; }
+.l-side .photos { margin-top: 0; }
+.l-wide .frame { aspect-ratio: 21 / 9; }
+.l-center { text-align: center; }
+.l-center .title { margin-inline: auto; }
+.l-center .prose p { margin-inline: auto; }
+.l-center .photos { width: min(100%, 420px); margin-inline: auto; }
+.l-pair .photos { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; align-items: start; }
+.l-quiet { max-width: 620px; }
+.l-quiet .title { font-size: 34px; margin-bottom: 16px; }
+.l-quiet .prose p { font-size: 17px; color: var(--pencil); }
+
+/* ── Year ──────────────────────────────────────────── */
+
+.yr-sec { display: grid; grid-template-columns: var(--margin) minmax(0, 1fr); column-gap: var(--gap); padding-top: 72px; }
+.yr-sec > * { grid-column: 2; }
+.yr-sec > .yr {
+  /* Not sticky: a sticky year would ride down the whole section, over the month names below. */
+  grid-column: 1; grid-row: 1 / span 2; align-self: start; margin: 0;
+  font: 500 clamp(56px, 8vw, 88px)/.9 var(--sans); letter-spacing: -.055em; font-variant-numeric: tabular-nums;
+}
+.yr-sec > .label { margin-bottom: 18px; }
+/* The year's months sit below its lanes, month names back in the margin. */
+.yr-sec > .months { grid-column: 1 / -1; margin-top: 96px; }
+.lanes { display: grid; gap: 8px; margin-bottom: 24px; }
+.lane { display: grid; grid-template-columns: 140px minmax(0, 1fr); gap: 16px; align-items: center; }
+.lane .lab { display: flex; align-items: center; gap: 8px; min-width: 0; font-size: 14px; color: var(--pencil); }
+.lane .lab .nm { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+a.lab:hover { color: var(--ink); }
+.lane svg { display: block; width: 100%; height: 16px; }
+
+.weeks-wrap { overflow-x: auto; margin-top: 10px; padding-bottom: 8px; }
+.weeks-months { position: relative; width: max-content; min-width: 100%; height: 20px; }
+.weeks-months span { position: absolute; left: calc(var(--w) * 13px); font-size: 12px; color: var(--pencil); }
+.weeks {
+  display: grid; grid-auto-flow: column; grid-template-rows: repeat(7, 10px); grid-auto-columns: 10px; gap: 3px;
+  width: max-content;
+}
+/* The 365 days are dots too. */
+.weeks .cell { display: block; border-radius: 50%; background: var(--empty); }
+.weeks .cell.has { background: var(--c); }
+.weeks .cell.has:hover { box-shadow: 0 0 0 2px var(--paper), 0 0 0 3px var(--ink); }
+.weeks .cell.future { background: transparent; box-shadow: inset 0 0 0 1px var(--grid); }
+.weeks .cell.out { visibility: hidden; }
+
+/* ── Calendar ──────────────────────────────────────── */
+
+.months { display: grid; gap: 80px; }
+.month { display: grid; grid-template-columns: var(--margin) minmax(0, 1fr); column-gap: var(--gap); }
+.month h2 { align-self: start; position: sticky; top: 28px; font: 500 30px/1.05 var(--sans); letter-spacing: -.03em; }
+.month h2 span { display: block; margin-top: 4px; font: italic 400 18px/1.3 var(--serif); letter-spacing: 0; color: var(--pencil); }
+.cal { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 5px; }
+.wdh { padding: 0 0 6px 4px; font-size: 13px; color: var(--pencil); }
+.cal .cell {
+  position: relative; aspect-ratio: 1 / .86; padding: 9px 10px; border-radius: 4px;
+  display: flex; flex-direction: column; justify-content: space-between;
+}
+.cal .cell > * { position: relative; }
+.cal .plate {
+  position: absolute; inset: 0; border-radius: 4px; background: var(--leaf);
+  box-shadow: 0 0 0 1px var(--grid); transition: box-shadow .2s;
+}
+.cal .cell.has:hover .plate { box-shadow: 0 0 0 1px var(--ink); }
+.cal .n { display: inline-block; align-self: flex-start; font-size: 14px; line-height: 1; color: var(--pencil); font-variant-numeric: tabular-nums; }
+.cal .has .n { color: var(--ink); font-weight: 500; }
+.cal .future .n { color: var(--faint); }
+.cal .dots { display: flex; flex-wrap: wrap; gap: 4px; }
+.cal .dots .dot { width: 7px; height: 7px; }
+
+/* ── Contexts: counts in the margin, names in the column ── */
+
+.search { margin: 0 0 24px var(--indent); }
+.search input {
+  width: 100%; padding: 12px 0; border: 0; border-bottom: 1px solid var(--grid); border-radius: 0;
+  background: transparent; color: var(--ink); font: 21px var(--sans); letter-spacing: -.01em;
+}
+.search input:focus { outline: none; border-bottom-color: var(--ink); }
+.search input::placeholder { color: var(--faint); }
+.clist a {
+  display: grid; grid-template-columns: var(--indent) 22px minmax(0, 1fr); grid-template-areas: "meta dot nm";
+  align-items: baseline; padding: 12px 0;
+}
+.clist .meta { grid-area: meta; padding-right: var(--gap); text-align: right; font-size: 14px; line-height: 1.35; color: var(--pencil); }
+.clist .meta .n { display: block; color: var(--ink); font-variant-numeric: tabular-nums; }
+.clist .meta .since { display: block; font: italic 14px var(--serif); }
+.clist .dot { grid-area: dot; transform: translateY(-3px); }
+.clist .nm { grid-area: nm; justify-self: start; display: inline-block; font: 500 26px/1.2 var(--sans); letter-spacing: -.025em; }
+.clist a:hover .nm { text-decoration: underline; text-underline-offset: 5px; text-decoration-thickness: 1px; }
+.hits { margin: -4px 0 12px calc(var(--indent) + 12px); font: italic 15px var(--serif); color: var(--pencil); }
+.p-contexts #none { margin-left: var(--indent); }
+
+/* ── Context ───────────────────────────────────────── */
+
+.p-context main { display: grid; grid-template-columns: var(--margin) minmax(0, 1fr); column-gap: var(--gap); align-items: start; }
+.back { grid-column: 1; grid-row: 1; margin-top: 88px; font-size: 15px; color: var(--pencil); }
+.back:hover { color: var(--ink); }
+.p-day .back { display: inline-block; margin-top: 48px; }
+.p-day .sheet { margin-top: 20px; }
+.ctx-head { grid-column: 2; grid-row: 1; display: flex; align-items: center; gap: 16px; margin: 72px 0 32px; }
+.ctx-head .dot { width: 14px; height: 14px; }
+.ctx-title { display: inline-block; font: 500 clamp(40px, 6.4vw, 68px)/1 var(--sans); letter-spacing: -.045em; }
+.facts { grid-column: 1; grid-row: 2; display: grid; gap: 16px; margin: 0; }
+.facts dt { font: italic 15px/1.3 var(--serif); color: var(--pencil); }
+.facts dd { margin: 2px 0 0; font-size: 16px; }
+.traces { grid-column: 2; grid-row: 2; display: grid; gap: 14px; }
+.trace { display: grid; grid-template-columns: 44px minmax(0, 1fr); gap: 12px; align-items: start; }
+.trace .ty, .cgrid .ty { font-size: 14px; line-height: 22px; color: var(--pencil); font-variant-numeric: tabular-nums; }
+/* A context's own 365 days: the year label lines up with the first row of dots. */
+.cgrid { display: grid; grid-template-columns: 44px minmax(0, 1fr); gap: 12px; align-items: start; }
+.cgrid .ty { padding-top: 14px; }
+.cgrid .weeks-wrap { margin-top: 0; }
+.trace svg { display: block; width: 100%; height: 22px; margin-bottom: 6px; }
+.cdays { grid-column: 1 / -1; margin-top: 32px; }
+.cm { margin-top: 56px; }
+.cm > .label { margin: 0 0 8px var(--indent); }
+.row { display: grid; grid-template-columns: var(--margin) minmax(0, 1fr); column-gap: var(--gap); padding: 20px 0; }
+
+/* ── Day: a leaf with the date in its margin ───────── */
+
+.sheet {
+  position: relative; display: grid; grid-template-columns: calc(var(--margin) - 48px) minmax(0, 1fr);
+  column-gap: var(--gap); margin-top: 48px; padding: 48px 48px 28px;
+}
+.sheet > * { position: relative; }
+.sheet > .plate { position: absolute; inset: 0; border-radius: 6px; background: var(--leaf); box-shadow: 0 0 0 1px var(--grid); }
+.sheet .sy { grid-column: 1; grid-row: 1; }
+.sheet .date { grid-column: 1; grid-row: 2; display: flex; flex-direction: column; margin-top: 8px; }
+.sheet .dn {
+  order: -1; display: inline-block; align-self: flex-start;
+  font: 500 clamp(96px, 13vw, 144px)/.82 var(--sans); letter-spacing: -.065em; font-variant-numeric: tabular-nums;
+}
+.sheet .mo { margin-top: 16px; font-size: 21px; letter-spacing: -.01em; }
+.sheet .wd { grid-column: 1; grid-row: 3; margin-top: 2px; }
+.groups { grid-column: 2; grid-row: 1 / span 4; align-self: start; padding-top: 4px; }
+.grp + .grp { margin-top: 30px; }
+.grp h2 { display: flex; align-items: center; gap: 10px; min-height: 20px; font-size: 15px; font-weight: 600; }
+.grp h2 .dot { width: 10px; height: 10px; }
+.grp .cn { display: inline-block; }
+.grp .ents { margin: 8px 0 0 20px; }
+.grp.bare { position: relative; }
+.grp.bare h2 { position: absolute; left: 0; top: .5em; min-height: 0; }
+.grp.bare .ents { margin-top: 0; }
+.pn { grid-column: 1 / -1; display: flex; justify-content: space-between; margin-top: 64px; font-size: 15px; }
+.pn .arr { display: none; }
+.pn .pl { font: italic 15px var(--serif); color: var(--pencil); }
+.pn a:hover { text-decoration: underline; text-underline-offset: 3px; text-decoration-thickness: 1px; }
+
+/* ── Log ───────────────────────────────────────────── */
+
+.p-log .legend { margin-left: var(--indent); }
+.lmonth { margin-top: 56px; }
+.lmonth > .label { margin: 0 0 8px var(--indent); }
+.lday { display: grid; grid-template-columns: var(--margin) minmax(0, 1fr); column-gap: var(--gap); padding: 22px 0; }
+.lg-grp + .lg-grp { margin-top: 18px; }
+.lg-grp h3 { margin-bottom: 4px; font-size: 15px; font-weight: 600; }
+/* Each group wears its colour beside its name, so the legend isn't needed to read it. */
+.lg-grp { position: relative; padding-left: 24px; }
+.lg-grp::before {
+  content: ""; position: absolute; left: 0; top: 7px; width: 10px; height: 10px; border-radius: 50%;
+  background: var(--c);
+}
+.lg-grp .cn { display: inline-block; }
+
+/* ── Vibe ──────────────────────────────────────────────
+   Small things made fast, in the order they were made: a record of a rhythm, not a portfolio, so
+   nothing here ranks or badges anything. Each one is a Media row — the year out in the margin
+   with its month beside it, the project in the column, picture first. Every picture sits whole in
+   the same 16:10 box, so a tall screenshot and a wide one still read as one list. */
+
+/* Each project is its own unit: the air between two of them is several times the air inside one. */
+.vb { display: grid; grid-template-columns: var(--margin) minmax(0, 1fr); column-gap: var(--gap); }
+.page-title + .vb { margin-top: 56px; }
+.vb + .vb { margin-top: 72px; }
+/* A year is wider than a day: where the margin is narrow, the month steps under it. */
+.vb .d .dd { flex-wrap: wrap; row-gap: 4px; }
+.vb-frame { aspect-ratio: 16 / 10; overflow: hidden; border-radius: 3px; background: #F1F1F0; }
+/* The whole picture, never cropped: a screenshot is read, not glanced at, so what doesn't fill the
+   box leaves the frame's own grey around it rather than losing its edges. */
+.vb-frame img, .vb-frame video { display: block; width: 100%; height: 100%; object-fit: contain; }
+.vb-frame.ph { display: grid; place-items: center; }
+.vb-title { margin-top: 18px; font: 500 24px/1.3 var(--sans); letter-spacing: -.02em; }
+.vb-title a:hover { text-decoration: underline; text-underline-offset: 4px; text-decoration-thickness: 1px; }
+.vb-blurb { max-width: 32em; margin: 8px 0 0; font: 400 17px/1.7 var(--serif); }
+.vb-links { margin: 14px 0 0; font-size: 15px; }
+/* The links wear the Home page's context underline, in that project's colour. */
+.vb-links .sep { margin-inline: 10px; color: var(--faint); }
+
+/* ── the ribbon ────────────────────────────────────── */
+
+.ribbon {
+  position: fixed; left: 0; right: 0; bottom: 0; z-index: 10;
+  background: color-mix(in srgb, var(--paper) 96%, transparent);
+  -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px);
+  box-shadow: 0 -1px 0 var(--grid);
+}
+.rb-in { position: relative; max-width: calc(var(--max) + 48px); margin-inline: auto; padding: 20px 24px 10px; }
+.rb-y { position: absolute; top: 4px; margin-left: 24px; font: italic 13px/1 var(--serif); color: var(--pencil); }
+.rb-track { position: relative; height: 30px; }
+.rb-past { position: absolute; left: 0; bottom: 0; height: 1px; background: var(--grid); }
+.rb-cols { position: relative; display: grid; grid-template-columns: repeat(var(--n), minmax(0, 1fr)); height: 100%; }
+/* One day: its dots stacked from the bottom up. */
+.rc { display: flex; flex-direction: column-reverse; align-items: center; gap: 1px; height: 100%; padding-bottom: 3px; }
+.rc b { display: block; flex: none; width: min(4px, 100%); aspect-ratio: 1; border-radius: 50%; background: var(--c); }
+.rc:hover b { box-shadow: 0 0 0 1px var(--ink); }
+.ribbon.focus b:not(.on) { opacity: .16; }
+/* The bracket: the days this page is showing. */
+.rb-window {
+  position: absolute; top: -6px; bottom: -3px; min-width: 3px; border-radius: 2px; pointer-events: none;
+  background: color-mix(in srgb, var(--ink) 3.5%, transparent);
+  box-shadow: inset 0 -2px 0 var(--ink), inset 1px 0 0 color-mix(in srgb, var(--ink) 35%, transparent), inset -1px 0 0 color-mix(in srgb, var(--ink) 35%, transparent);
+}
+
+/* ── narrow screens ────────────────────────────────── */
+
+@media (max-width: 760px) {
+  :root { --margin: 84px; --gap: 16px; --indent: 0px; }
+  body { font-size: 15px; }
+  .wrap, .rb-in { padding-inline: 18px; }
+  .rb-y { margin-left: 18px; }
+  .nav { gap: 16px; }
+  .page-title { margin-top: 48px; }
+  .foot p { margin-left: 0; }
+
+  /* Stack the margin above the column. */
+  .l-side, .yr-sec, .month, .p-context main, .sheet { grid-template-columns: minmax(0, 1fr); }
+  .yr-sec > *, .yr-sec > .yr, .back, .ctx-head, .facts, .traces, .cdays,
+  .sheet .sy, .sheet .date, .sheet .wd, .groups { grid-column: 1; grid-row: auto; position: static; }
+  .post { padding-top: 64px; }
+  .post .kicker { margin-bottom: 10px; }
+  .l-side { gap: 32px; }
+  .l-wide .frame { aspect-ratio: 3 / 2; }
+  .yr-sec > .yr { margin-bottom: 24px; }
+  .month h2 { position: static; margin-bottom: 14px; }
+  .month h2 span { display: inline; margin-left: 8px; }
+  .lane { grid-template-columns: 90px minmax(0, 1fr); gap: 10px; }
+  .cgrid { grid-template-columns: minmax(0, 1fr); gap: 2px; }
+  .cgrid .ty { padding-top: 0; }
+  .axis .odd { display: none; }
+  .cal { gap: 3px; }
+  .cal .cell { aspect-ratio: 1 / 1.1; padding: 6px; }
+  .cal .dots { gap: 3px; }
+  .cal .dots .dot { width: 5px; height: 5px; }
+  .wdh { font-size: 11px; padding-left: 2px; }
+  .back { margin-top: 40px; }
+  .ctx-head { margin: 16px 0 24px; }
+  .facts { grid-template-columns: repeat(3, auto); justify-content: start; gap: 12px 24px; margin-bottom: 28px; }
+  .clist a { grid-template-columns: 12px minmax(0, 1fr); grid-template-areas: "dot nm" ". meta"; }
+  .clist .meta { padding-right: 0; text-align: left; }
+  .clist .meta .n, .clist .meta .since { display: inline; }
+  .clist .meta .since::before { content: ", "; }
+  .clist .nm { font-size: 22px; }
+  .hits { margin-left: 12px; }
+  .vb + .vb { margin-top: 56px; }
+  .vb-title { font-size: 21px; }
+  .vb-blurb { font-size: 16px; }
+  .d .dn { font-size: 30px; }
+  .d .mo { font-size: 13px; }
+  .d .wd { font-size: 13px; }
+  .sheet { padding: 32px 22px 22px; margin-top: 28px; }
+  .sheet .date { flex-direction: row; align-items: baseline; gap: 12px; }
+  .sheet .dn { font-size: 88px; }
+  .sheet .mo { margin-top: 0; }
+  .groups { margin-top: 28px; }
+}
+
+/* Under 640px the picture goes to both edges, so the day steps up above the card rather than
+   standing beside a picture that is wider than the column it would sit in. */
+@media (max-width: 640px) {
+  .vb { grid-template-columns: minmax(0, 1fr); }
+  .vb .d { margin-bottom: 14px; }
+  .vb-frame { margin-inline: -18px; border-radius: 0; }
+}

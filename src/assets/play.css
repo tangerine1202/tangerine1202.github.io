@@ -1,0 +1,134 @@
+/* Meanwhile — Play.
+   One more layer on top of the Almanac (almanac.css + almanac-motion.css): nothing here is needed
+   for the site to work, and it borrows the Almanac's own vocabulary — --paper --leaf --ink --pencil
+   --faint --grid --empty, Schibsted Grotesk and Newsreader — rather than bringing its own.
+   Loaded after motion.css, so where both set a value this file wins.
+   Sections: tokens · Now accent · Ink & Focus · Year Ridge · Prose Peek · Dots.
+   Rules that move live inside `prefers-reduced-motion: no-preference`; what they move is
+   described outside it, so the site still says the same thing with animation turned off. */
+
+/* ── tokens ────────────────────────────────────────── */
+
+:root {
+  --ease: cubic-bezier(.22, .8, .24, 1);
+  --focus-in: .32s;
+  --focus-out: .22s;
+}
+
+/* ── Now accent ────────────────────────────────────────
+   --now is the context of the last two weeks, written on <html> at build time.
+   The site's own colour is whatever I have been doing lately. */
+
+.nav .mark { background: var(--now, var(--ink)); }
+::selection { background: color-mix(in srgb, var(--now, var(--ink)) 28%, transparent); }
+
+/* ── Ink & Focus ───────────────────────────────────────
+   Colour answers one question: where else is the thing I am looking at?
+   focus.js writes the context on <html data-focus> and marks its elements .on — on the ribbon too,
+   where it borrows the Almanac's own .ribbon.focus b:not(.on) rule rather than adding another. */
+
+/* A Year lane carries its own data-cid; it is excluded here so the lane and its line don't
+   fade twice over (.22 × .25), and it keeps its label readable while its line steps back. */
+html[data-focus] main [data-cid]:not(.on):not(.lane),
+html[data-focus] main [data-cids]:not(.on) { opacity: .22; }
+html[data-focus] main .on { opacity: 1; }
+html[data-focus] main .lane:not(.on) svg { opacity: .25; }
+html[data-focus] main .grp:not(.on) .ents,
+html[data-focus] main .lg-grp:not(.on) .ents { opacity: .35; }
+/* A context with no colour of its own borrows the ink while it is the one in focus. */
+.dot.on { background: var(--c-on, var(--c)); }
+.weeks .cell.on { background: var(--c-on, var(--c)); }
+
+@media (prefers-reduced-motion: no-preference) {
+  [data-cid], [data-cids] {
+    transition: opacity var(--focus-out) var(--ease), transform var(--focus-out) var(--ease), background-color var(--focus-out);
+  }
+  /* Coming into focus is slower than leaving it, and each dot waits for its own date. */
+  html[data-focus] main .on { transition-duration: var(--focus-in); }
+  html[data-focus] main .dot.on,
+  html[data-focus] main .weeks .cell.on { transform: scale(1.3); }
+  /* The ribbon dims and lights with everything else, at the same pace. */
+  .ribbon .rc b { transition: opacity var(--focus-out) var(--ease); }
+  .ribbon.focus b.on { transition-duration: var(--focus-in); }
+}
+
+/* ── Year Ridge ────────────────────────────────────────
+   The lane is the 7-day density itself: not ticks with shading under them, but hills in the
+   context's own colour, standing on the baseline — where a context ran thick, the line rises.
+   The lanes grow from the Almanac's 16px to make room for them. The ridge stops at today, so
+   the dashed future line beyond it is never drawn over. Entrance is almanac-motion.css's vt-draw.
+   Context pages are dot grids, not lines, so the ridge appears on the Log's lanes and in a peek. */
+
+.lane svg { height: 26px; }
+
+/* ── Log under the Year ────────────────────────────────
+   The log has no page of its own: each year keeps its own days under its own lanes, so a year
+   reads top to bottom as shape first and then sentences. The rows keep the Log page's margin,
+   so they break out of the year's text column the way the calendar months used to. */
+
+.yr-sec > .lmonth { grid-column: 1 / -1; }
+/* The first month meets the lanes directly: no tag between them, only air. */
+.yr-sec > .lmonth:first-of-type { margin-top: 64px; }
+
+/* ── Prose Peek ────────────────────────────────────────
+   A word in a sentence is also a string of dates: looking at the link shows them. */
+
+.lk { position: relative; }
+.lk-trace {
+  position: absolute; left: 0; top: calc(100% + 10px); width: 240px; padding: 8px 10px;
+  border-radius: 3px; background: var(--leaf); box-shadow: 0 0 0 1px var(--grid);
+  z-index: 2; pointer-events: none; opacity: 0; transform: translateY(-4px);
+}
+.lk-trace svg { display: block; width: 100%; height: 22px; }
+/* The caption is a note in the margin's voice, like a photo's. */
+.lk-n { display: block; margin-top: 6px; font: italic 15px/1.4 var(--serif); color: var(--pencil); }
+.lk:hover .lk-trace, .lk:focus-visible .lk-trace { opacity: 1; transform: none; }
+
+/* Without hover there is no "look at" between rest and leaving: a tap just goes. */
+@media (hover: none) {
+  .lk-trace { display: none; }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .lk-trace { transition: opacity .2s var(--ease), transform .28s var(--ease); }
+  /* The little line draws itself the way a Year lane does. */
+  .lk:hover .lk-trace svg { animation: vt-draw .55s var(--ease) both; }
+}
+
+/* ── Media ─────────────────────────────────────────────
+   The media log wears the Log page's clothes: the year sits where a day's numeral sits, the kinds
+   where its dots sit, and the lines keep the order and the day they were written on — a record,
+   not a catalogue. The shortlist and what's on hold are rows like any year. */
+
+.mdesc { max-width: 32em; margin: -4px 0 40px var(--indent); font: italic 18px/1.5 var(--serif); color: var(--pencil); }
+
+/* The legend is the filter: press a kind to keep only it. */
+.mlegend { margin-left: var(--indent); }
+.mlegend button {
+  display: inline-flex; align-items: center; gap: 7px; padding: 0; border: 0; background: none;
+  font: inherit; color: inherit; cursor: pointer; transition: color .2s;
+}
+.mlegend button:hover, .mlegend button[aria-pressed="true"] { color: var(--ink); }
+.mlegend button[aria-pressed="true"] .nm { text-decoration: underline; text-underline-offset: 4px; text-decoration-thickness: 1px; }
+.mlegend .n { color: var(--faint); font-variant-numeric: tabular-nums; }
+
+/* The row: Log's day row, with the year as the numeral and emoji as the dots. */
+.mday .d .dn { letter-spacing: -.04em; }
+.mday .d .dots { gap: 6px; margin-top: 12px; }
+.mday .d .mk { font-size: 14px; line-height: 1; }
+.mlines > li + li { margin-top: 8px; }
+.ml { display: grid; grid-template-columns: 24px minmax(0, 1fr) auto; column-gap: 10px; align-items: baseline; }
+/* The day sits out at the right edge, where a ledger keeps its dates. */
+.ml .md { text-align: right; font-size: 13px; color: var(--pencil); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.ml .mk { font-size: 14px; line-height: 1; text-align: center; }
+.ml .mb { font: italic 15px var(--serif); color: var(--pencil); }
+.ml .mb::before { content: "/ "; }
+.mlines .mnote { margin: 16px 0 8px; font: italic 16px/1.4 var(--serif); color: var(--pencil); }
+.m-highlight .d .dn::before { content: "⭐"; display: block; margin-bottom: 8px; font-size: 18px; line-height: 1; }
+.m-highlight .d .dn, .m-pause .d .dn { font-size: 26px; letter-spacing: -.02em; }
+.m-pause .d .dn, .m-pause .ml .mt { color: var(--pencil); }
+
+@media (max-width: 760px) {
+  .ml { grid-template-columns: 22px minmax(0, 1fr) auto; column-gap: 8px; }
+  .ml .md { font-size: 12px; }
+}
