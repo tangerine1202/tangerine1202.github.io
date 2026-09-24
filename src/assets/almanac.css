@@ -119,6 +119,9 @@ svg .future { stroke: var(--faint); stroke-width: 1px; stroke-dasharray: 3 4; }
 .photo.square .frame { aspect-ratio: 1; }
 /* The whole photo, never cropped: what doesn't fill the frame leaves the frame's own grey around it. */
 .frame img { display: block; width: 100%; height: 100%; object-fit: contain; }
+/* A real photo's frame is its own shape (set on the page), so it fills it. A tall one is kept within
+   80% of the screen's height, narrowing rather than leaving empty space beside it. */
+.photo { max-width: calc(80vh * var(--ar, 100)); }
 /* Placeholder: dot-grid paper, the same material as everything else here. */
 .frame.ph {
   display: grid; place-items: center;
@@ -138,6 +141,13 @@ svg .future { stroke: var(--faint); stroke-width: 1px; stroke-dasharray: 3 4; }
 .l-quiet { max-width: 620px; }
 .l-quiet .title { font-size: 34px; margin-bottom: 16px; }
 .l-quiet .prose p { font-size: 17px; color: var(--pencil); }
+/* One photo fitted to its text (see fit() in src/pages/home.mjs): the build sets the text column's
+   width (--tw), and the photo's width (--pw) and height (--h), so the photo is about as tall as the
+   text beside it. Both columns are fixed widths, so the image's own size never pushes the text;
+   45vw keeps the photo from crowding the text on a narrower screen. */
+.fit.l-side { grid-template-columns: minmax(0, var(--tw)) min(var(--pw), 45vw); justify-content: space-between; }
+.fit.l-side .photo { width: 100%; }
+.fit.l-wide .photo { width: min(100%, calc(var(--h) * var(--ar))); max-width: 100%; }
 
 /* ── Year ──────────────────────────────────────────── */
 
@@ -374,6 +384,8 @@ a.lab:hover { color: var(--ink); }
   .post { padding-top: 64px; }
   .post .kicker { margin-bottom: 10px; }
   .l-side { gap: 32px; }
+  .fit.l-side { grid-template-columns: minmax(0, 1fr); }
+  .fit.l-side .photo, .fit.l-wide .photo { width: auto; }
   .l-wide .frame { aspect-ratio: 3 / 2; }
   .yr-sec > .yr { margin-bottom: 24px; }
   .month h2 { position: static; margin-bottom: 14px; }

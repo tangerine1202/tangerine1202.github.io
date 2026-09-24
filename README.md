@@ -84,8 +84,16 @@ Vibe Code 了幾個小工具，造福[[航警替代役|分隊和未來的大家]
 `photo` is `caption | shape | file`, and a comma starts the next photo, so a caption carries no comma.
 The shapes are `landscape`, `portrait` and `square`; the file lives in `content/photos/`. A photo whose
 file is missing — or a bare `photo:` with nothing after it — still lays out, as a placeholder frame, so a
-post can be written before its picture exists. The layout follows the photos (one portrait → beside the
-text, two → a pair, none → quiet) unless `layout:` says otherwise. `[[Context]]` or `[[Context|words]]`
+post can be written before its picture exists. The layout follows the photos (one → beside the
+text, two → a pair, none → quiet) unless `layout:` says otherwise.
+
+One real photo is fitted to its text: it stands beside the text at about the text's height (360–600 px),
+its width following its own shape, and the text column narrows from 608 to 480 px if a wide photo needs
+the room. The build estimates the text's height by counting lines, so a short post gets a small picture
+and no photo leaves a band of empty space beside its words. A photo too wide to stand beside the text
+(a panorama) goes under it at that height instead. Once the file exists, `shape` only matters for the
+placeholder; the real photo's size decides. The numbers live at the top of `fit()` in
+`src/pages/home.mjs` and must stay in step with the title and prose sizes in `almanac.css`. `[[Context]]` or `[[Context|words]]`
 links a word to that context and grows its peek on hover; a context nobody has recorded stays plain text.
 `[words](https://…)` links off the site.
 

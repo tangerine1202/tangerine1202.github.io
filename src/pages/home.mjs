@@ -4,6 +4,64 @@ import { esc, fmtShort } from '../util.mjs';
 import { layout, ctxHref, traceSvg } from '../layout.mjs';
 import { photoName } from '../photos.mjs';
 
+/** A photo's shape from its real size; within about 15% of square counts as square. */
+export function shapeOf({ w, h }) {
+  const r = w / h;
+  return r > 1.15 ? 'landscape' : r < 0.87 ? 'portrait' : 'square';
+}
+
+// ── Fitting one photo to its text ─────────────────────
+// A photo is as tall as the text beside it, within PHOTO_H, so a short post gets a small picture and
+// nothing leaves a band of empty space. The text's height is estimated here, not measured: on a
+// desktop its column is a known width (at most 32em of 19px prose), so lines can be counted.
+// The numbers are the stylesheet's: keep them in step with .post .title, .prose p and --max.
+const CONTENT = 1040; // --max
+const GAP = 64; // .l-side's gap
+const TEXT_W = [480, 608]; // the text column may narrow to 480px to make room; 608px is 32em of prose
+const PHOTO_H = [360, 600];
+const PROSE = { size: 19, line: 19 * 1.78, after: 19 };
+const TITLE = { size: 60, line: 60 * 1.08, after: 28, em: 0.46 }; // em: a Latin letter's average width in the display serif
+const KICKER = 14 * 1.4 + 14;
+
+/** How wide a run of text is, in em: a CJK character is a full em, Latin about half, a space a quarter. */
+export function ems(s, latin = 0.5) {
+  let n = 0;
+  for (const ch of s) n += ch === ' ' ? 0.25 : /[ᄀ-ᅟ⺀-꓏가-힣豈-﫿︰-﹏＀-｠￠-￦]/u.test(ch) ? 1 : latin;
+  return n;
+}
+
+// The words a paragraph shows: a link's words, not its target.
+const shown = (p) => p.replace(/\[\[([^\]|]+)(?:\|([^\]]+))?\]\]/g, (_, a, b) => b ?? a).replace(/\[([^\]]+)\]\([^)\s]+\)/g, '$1');
+
+/** The text column's height in px at `width`: kicker, title and paragraphs, with the margins between them. */
+export function textHeight(p, width) {
+  const lines = (em, size) => Math.max(1, Math.ceil((em * size) / width));
+  const title = lines(ems(p.title, TITLE.em), TITLE.size) * TITLE.line + TITLE.after;
+  const prose = p.paras.reduce((sum, para) => sum + lines(ems(shown(para)), PROSE.size) * PROSE.line + PROSE.after, 0);
+  return (p.kicker ? KICKER : 0) + title + prose;
+}
+
+/**
+ * Where one photo goes and how big it is: beside the text at the text's height, the text narrowing
+ * a little if the photo needs it. A photo too wide to stand beside the text at a useful height
+ * (a panorama) goes under it instead, no taller than the text would have made it.
+ */
+export function fit(p, { w, h }) {
+  const clampH = (x) => Math.min(PHOTO_H[1], Math.max(PHOTO_H[0], x));
+  let tw = TEXT_W[1];
+  let ph = clampH(textHeight(p, tw));
+  for (let i = 0; i < 3; i++) {
+    tw = Math.min(TEXT_W[1], Math.max(TEXT_W[0], CONTENT - GAP - ph * (w / h)));
+    ph = clampH(textHeight(p, tw));
+  }
+  const room = CONTENT - GAP - tw;
+  const side = (height) => ({ layout: 'side', textW: Math.round(tw), photoW: Math.round(height * (w / h)), photoH: Math.round(height) });
+  if (ph * (w / h) <= room) return side(ph);
+  const squeezed = room / (w / h);
+  if (squeezed >= 0.7 * textHeight(p, tw)) return side(squeezed);
+  return { layout: 'wide', textW: null, photoW: null, photoH: Math.round(ph) };
+}
+
 /** Layout follows the photos, unless the post says otherwise. */
 export function autoLayout(photos) {
   if (!photos.length) return 'quiet';
@@ -29,7 +87,7 @@ export function parsePost(text, file) {
   }
   if (!meta.date || !meta.title) throw new Error(`${file}: "date" and "title" are required`);
   const paras = m[2].trim().split(/\n\s*\n/).map((p) => p.replace(/\s*\n\s*/g, ' ').trim()).filter(Boolean);
-  return { ...meta, paras, layout: meta.layout || autoLayout(meta.photos), file };
+  return { ...meta, paras, layout: meta.layout || autoLayout(meta.photos), layoutSet: Boolean(meta.layout), file };
 }
 
 export function loadPosts(dir) {
@@ -82,16 +140,30 @@ function prose(site, p, date) {
 
 function figure(site, ph) {
   const real = ph.src && site.hasPhoto(ph.src);
+  // A real photo's frame is the photo's own shape, so nothing around it is left empty; `--ar` also
+  // lets the stylesheet keep a tall one within the screen. A placeholder keeps the shape it was given.
+  const size = real && site.photoSize?.(ph.src);
+  const ar = size ? `${size.w} / ${size.h}` : null;
   const inner = real
-    ? `<img src="${site.url(`/photos/${encodeURI(photoName(ph.src))}`)}" alt="${esc(ph.caption)}" loading="lazy">`
+    ? `<img src="${site.url(`/photos/${encodeURI(photoName(ph.src))}`)}" alt="${esc(ph.caption)}"${size ? ` width="${size.w}" height="${size.h}"` : ''} loading="lazy">`
     : '<span class="ph-label">Photo</span>';
   const caption = ph.caption ? `<figcaption>${esc(ph.caption)}</figcaption>` : '';
-  return `<figure class="photo ${esc(ph.shape)}"><div class="frame${real ? '' : ' ph'}">${inner}</div>${caption}</figure>`;
+  return `<figure class="photo ${esc(ph.shape)}"${ar ? ` style="--ar: ${ar}"` : ''}>`
+    + `<div class="frame${real ? '' : ' ph'}"${ar ? ` style="aspect-ratio: ${ar}"` : ''}>${inner}</div>${caption}</figure>`;
 }
 
 function post(site, p) {
-  const photos = p.photos.length ? `<div class="photos">${p.photos.map((ph) => figure(site, ph)).join('')}</div>` : '';
-  return `<article class="post l-${esc(p.layout)}" data-back-label="${esc(p.title)}">
+  // The layout follows each photo's real shape, not the one written in the post, unless the post names a layout.
+  const shaped = p.photos.map((ph) => {
+    const size = ph.src && site.hasPhoto(ph.src) && site.photoSize?.(ph.src);
+    return size ? { ...ph, shape: shapeOf(size), size } : ph;
+  });
+  // One real photo is fitted to the text (see fit); placeholders and pairs keep the layout of their shapes.
+  const one = !p.layoutSet && shaped.length === 1 && shaped[0].size ? fit(p, shaped[0].size) : null;
+  const layout = p.layoutSet ? p.layout : one ? one.layout : autoLayout(shaped);
+  const vars = one ? ` style="${one.textW ? `--tw: ${one.textW}px; --pw: ${one.photoW}px; ` : ''}--h: ${one.photoH}px"` : '';
+  const photos = shaped.length ? `<div class="photos">${shaped.map((ph) => figure(site, ph)).join('')}</div>` : '';
+  return `<article class="post l-${esc(layout)}${one ? ' fit' : ''}"${vars} data-back-label="${esc(p.title)}">
 <div class="text">
 ${p.kicker ? `<p class="kicker">${esc(p.kicker)}</p>` : ''}
 <h2 class="title">${esc(p.title)}</h2>
