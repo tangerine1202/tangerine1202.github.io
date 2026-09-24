@@ -1,6 +1,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { parse, plain } from '../src/parse.mjs';
+import realConfig from '../meanwhile.config.mjs';
 
 const config = { privateTag: '#private', privateContexts: ['Secret'], mapEntry: null };
 const one = (log) => parse(log, config).days[0].entries;
@@ -8,6 +9,11 @@ const one = (log) => parse(log, config).days[0].entries;
 test('a leading link becomes the context', () => {
   assert.deepEqual(one('### 2026-09-10\n- [[Job Preparation]] resume v3 完成')[0],
     { context: 'Job Preparation', text: 'resume v3 完成', sub: [] });
+});
+
+test('a link with a folder path is the note it names, as in Obsidian', () => {
+  assert.equal(one('### 2026-09-22\n- [[P - Meanwhile/Meanwhile]] 上線 stage 版')[0].context, 'Meanwhile');
+  assert.equal(plain('讀完 [[Notes/grill-me Skill]]'), '讀完 grill-me Skill');
 });
 
 test('colon and checkbox after the leading link are removed', () => {
@@ -58,4 +64,9 @@ test('mapEntry sees the raw text and can change the context', () => {
   const mapEntry = (e) => (e.text.includes('[[📖') ? { ...e, context: 'Reading' } : e);
   const { days } = parse('### 2026-09-10\n- Begin reading [[📖 A Book]]', { ...config, mapEntry });
   assert.deepEqual([days[0].entries[0].context, days[0].entries[0].text], ['Reading', 'Begin reading A Book']);
+});
+
+test('[[media-log]] leading a line makes it Reading; after another context it is only a tag', () => {
+  const days = parse('### 2026-09-24\n- [[media-log]] 閱讀 藍色時期 16\n- [[Japanese]] [[media-log]] 新日檢N2語言知識全攻略\n', realConfig).days;
+  assert.deepEqual(days[0].entries.map((e) => [e.context, e.text]), [['Reading', '閱讀 藍色時期 16'], ['Japanese', '新日檢N2語言知識全攻略']]);
 });

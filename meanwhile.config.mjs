@@ -40,14 +40,10 @@ export default {
 
   // Last chance to change a line after parsing. `text` is still raw here. Return null to drop it.
   mapEntry(e) {
-    // Temporary Reading rule — delete once the log uses [[Reading]] directly.
-    if (e.context?.startsWith('📖')) {
-      const book = e.context.replace('📖', '').trim();
-      return { ...e, context: 'Reading', text: `${book} ${e.text}` };
-    }
-    if (!e.context && (e.text.includes('[[📖') || /^(開始閱讀|閱讀|讀完|begin reading|read )/i.test(e.text))) {
-      return { ...e, context: 'Reading' };
-    }
+    // [[media-log]] marks a reading line: led by it, the line is Reading; after another context,
+    // it is only a tag and leaves the words.
+    if (e.context === 'media-log') return { ...e, context: 'Reading' };
+    if (e.text.includes('[[media-log]]')) e = { ...e, text: e.text.replace(/\[\[media-log\]\]\s*/g, '') };
     return e;
   },
 };

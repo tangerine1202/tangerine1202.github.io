@@ -11,7 +11,7 @@ const indentWidth = (s) => [...s].reduce((n, ch) => n + (ch === '\t' ? 4 : 1), 0
 export function plain(s, warn) {
   let out = s
     .replace(/\[\[([^\]|]+)\|([^\]]+)\]\]/g, '$2')
-    .replace(/\[\[([^\]]+)\]\]/g, '$1')
+    .replace(/\[\[([^\]]+)\]\]/g, (_, target) => target.split('/').pop().trim())
     .replace(/\[([^\]]+)\]\([^)\s]*\)/g, '$1');
   if (out.includes('[[')) {
     warn?.('unclosed [[ (shown as text)');
@@ -27,7 +27,8 @@ export function plain(s, warn) {
 function toEntry(raw, config, warn) {
   const s = raw.replace(/^\[[ xX]\]\s+/, '').replace(/^(?:[-*]\s+)+/, '');
   const lead = s.match(LEAD_LINK);
-  let e = { context: lead ? lead[1].trim() : null, text: lead ? s.slice(lead[0].length) : s, sub: [] };
+  // `[[Folder/Note]]` is the note `Note`, the way Obsidian resolves it.
+  let e = { context: lead ? lead[1].trim().split('/').pop().trim() : null, text: lead ? s.slice(lead[0].length) : s, sub: [] };
   if (config.mapEntry) {
     e = config.mapEntry(e);
     if (!e) return null;
