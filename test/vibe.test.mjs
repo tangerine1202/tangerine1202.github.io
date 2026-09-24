@@ -143,8 +143,8 @@ test('a picture is a 16:10 frame with its alt text', () => {
   assert.match(css, /\n\.frame img \{[^}]*object-fit: contain/);
 });
 
-test('a webp beside the png is used, and a missing file still lays out', () => {
-  assert.match(vibe(site, [project()]), /<source srcset="\/photos\/vibe-a\.webp" type="image\/webp">/);
+test('a picture is published as a .jpg, and a missing file still lays out', () => {
+  assert.match(vibe(site, [project()]), /<img src="\/photos\/vibe-a\.jpg"/);
   assert.match(vibe(site, [project({ image: 'vibe-missing.png' })]), /<div class="vb-frame ph">/);
 });
 

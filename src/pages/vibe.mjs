@@ -1,5 +1,6 @@
 import { esc, ymd, shortMonth } from '../util.mjs';
 import { layout } from '../layout.mjs';
+import { photoName } from '../photos.mjs';
 import { vibeDotTrace, VIBE_DOT_TRACE_CSS } from '../vibe-dot-trace.mjs';
 
 // The three kinds of link a project can carry, in the order a title prefers them.
@@ -17,19 +18,12 @@ export function titleHref(links) {
 
 /** The picture: always 16:10, so a tall screenshot and a wide one sit in the same shape. */
 function frame(site, v) {
-  const href = (name) => site.url(`/photos/${encodeURI(name)}`);
   if (!site.hasPhoto(v.image)) return `<div class="vb-frame ph"><span class="ph-label">Image</span></div>`;
+  const src = site.url(`/photos/${encodeURI(photoName(v.image))}`);
   if (/\.mp4$/i.test(v.image)) {
-    return `<div class="vb-frame"><video src="${href(v.image)}" aria-label="${esc(v.alt)}" muted autoplay loop playsinline></video></div>`;
+    return `<div class="vb-frame"><video src="${src}" aria-label="${esc(v.alt)}" muted autoplay loop playsinline></video></div>`;
   }
-  const img = `<img src="${href(v.image)}" alt="${esc(v.alt)}" loading="lazy" decoding="async">`;
-  // A compressed sibling is used when it is there; the build never makes one, so nothing here
-  // depends on an image library.
-  const webp = v.image.replace(/\.(png|jpe?g)$/i, '.webp');
-  const inner = webp !== v.image && site.hasPhoto(webp)
-    ? `<picture><source srcset="${href(webp)}" type="image/webp">${img}</picture>`
-    : img;
-  return `<div class="vb-frame">${inner}</div>`;
+  return `<div class="vb-frame"><img src="${src}" alt="${esc(v.alt)}" loading="lazy" decoding="async"></div>`;
 }
 
 function links(site, v) {

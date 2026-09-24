@@ -2,6 +2,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { esc, fmtShort } from '../util.mjs';
 import { layout, ctxHref, traceSvg } from '../layout.mjs';
+import { photoName } from '../photos.mjs';
 
 /** Layout follows the photos, unless the post says otherwise. */
 export function autoLayout(photos) {
@@ -82,7 +83,7 @@ function prose(site, p, date) {
 function figure(site, ph) {
   const real = ph.src && site.hasPhoto(ph.src);
   const inner = real
-    ? `<img src="${site.url(`/photos/${encodeURI(ph.src)}`)}" alt="${esc(ph.caption)}" loading="lazy">`
+    ? `<img src="${site.url(`/photos/${encodeURI(photoName(ph.src))}`)}" alt="${esc(ph.caption)}" loading="lazy">`
     : '<span class="ph-label">Photo</span>';
   const caption = ph.caption ? `<figcaption>${esc(ph.caption)}</figcaption>` : '';
   return `<figure class="photo ${esc(ph.shape)}"><div class="frame${real ? '' : ' ph'}">${inner}</div>${caption}</figure>`;

@@ -47,6 +47,18 @@ the same binary (`process.execPath`), so they don't depend on `node` being on PA
 
 `MEANWHILE_BASE=/sub/path/` builds for a site that isn't at the domain root.
 
+### Photos
+
+Put photos in `content/photos/` in any of JPG, PNG, WebP, BMP or TIFF, and refer to them by that
+name. The build publishes each still as a compressed `.jpg` in `dist/photos/`: at most 2000 px on
+the long edge, turned upright from its EXIF orientation, transparency laid on white, and all
+metadata (EXIF, GPS) stripped. A small JPEG that would only grow when re-encoded is kept as it was,
+less its EXIF. Originals are never changed. Anything else (an `.mp4`) is published as it is.
+
+This needs `ffmpeg` on PATH (`apt install ffmpeg`); without it, the build stops. Results are cached
+in `.cache/`, so rebuilds only re-encode what changed. The size and quality are `MAX` and `QUALITY`
+at the top of `src/photos.mjs`; changing them starts a fresh cache.
+
 ## Content is not in git
 
 Everything under `content/` — the daily log, the media log, Home posts, Vibe entries and photos — is
@@ -107,8 +119,7 @@ Projects are listed newest first, each with its year out in the margin and its m
 the way the Media page keeps its years. The picture lives in `content/photos/` as `vibe-<slug>.png`, where `<slug>` is the file
 name, and sits whole — never cropped — in a 16:10 frame, so a tall screenshot and a wide one read
 as one list. A file
-that isn't there yet lays out as a placeholder frame, like a Home photo. A `vibe-<slug>.webp` beside
-it is used when it exists (the build never makes one: no image dependency). For something that has
+that isn't there yet lays out as a placeholder frame, like a Home photo. For something that has
 to move, use a short `.mp4` — never a GIF — and it plays muted and looping in the same frame.
 
 ### Removing the Vibe dot trace

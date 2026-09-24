@@ -15,6 +15,7 @@ import { media } from './src/pages/media.mjs';
 import { parseMedia } from './src/media.mjs';
 import { vibe } from './src/pages/vibe.mjs';
 import { loadVibe } from './src/vibe.mjs';
+import { buildPhotos, photoName, jpegSize } from './src/photos.mjs';
 
 const root = path.dirname(fileURLToPath(import.meta.url));
 const at = (...p) => path.join(root, ...p);
@@ -115,6 +116,19 @@ for (const p of posts) {
   for (const ph of p.photos) if (ph.src && !site.hasPhoto(ph.src)) warnings.push(`${p.file}: photo ${ph.src} not found (placeholder shown)`);
 }
 
+// Photos first: Home lays each post out around its photo's real size.
+fs.rmSync(out, { recursive: true, force: true });
+try {
+  warnings.push(...buildPhotos(photosDir, path.join(out, 'photos'), at('.cache')));
+} catch (e) {
+  console.error(`✗ ${e.message}`);
+  process.exit(1);
+}
+site.photoSize = (src) => {
+  const f = path.join(out, 'photos', photoName(src));
+  return fs.existsSync(f) ? jpegSize(fs.readFileSync(f)) : null;
+};
+
 const pages = [
   ['index.html', home(site, posts)],
   // The Log is the Year page: each year's shape, with that year's days under it.
@@ -126,7 +140,6 @@ const pages = [
   ...model.dates.map((d) => [`d/${d}/index.html`, day(site, d)]),
 ];
 
-fs.rmSync(out, { recursive: true, force: true });
 for (const [file, html] of pages) {
   fs.mkdirSync(path.dirname(path.join(out, file)), { recursive: true });
   fs.writeFileSync(path.join(out, file), html);
@@ -134,7 +147,6 @@ for (const [file, html] of pages) {
 fs.copyFileSync(at('src/assets', theme.css), path.join(out, 'style.css'));
 if (motion) fs.copyFileSync(at('src/assets', theme.motionCss), path.join(out, 'motion.css'));
 for (const f of theme.extraCss ?? []) fs.copyFileSync(at('src/assets', f), path.join(out, f));
-if (fs.existsSync(photosDir)) fs.cpSync(photosDir, path.join(out, 'photos'), { recursive: true });
 
 for (const w of warnings) console.warn(`  ! ${w}`);
 console.log(`✓ ${pages.length} pages → ${path.basename(out)}/ in ${Date.now() - started}ms`);
