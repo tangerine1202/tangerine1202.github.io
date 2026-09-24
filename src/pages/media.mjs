@@ -13,13 +13,10 @@ function line(e) {
     + `<span class="mt">${esc(e.title)}${by}</span><span class="md">${e.date ? fmtShort(e.date) : ''}</span></li>`;
 }
 
-/** A section laid out like a Log day: the year where the numeral goes, its kinds where the dots go. */
+/** A section laid out like a Log day: the year where the numeral goes, and nothing under it. */
 function row(s) {
-  const kinds = [...new Set(s.entries.filter((e) => e.type === 'item').map((e) => e.kind))]
-    .sort((a, b) => ORDER.indexOf(a) - ORDER.indexOf(b))
-    .map((k) => `<span class="mk" data-kind="${k}" title="${kindLabel(k)}">${emojiOf(k)}</span>`).join('');
-  return `<div class="lday mday m-${s.kind}" data-kind-row><div class="d"><span class="dd"><span class="dn">${esc(s.title)}</span></span>`
-    + `<span class="dots">${kinds}</span></div><div class="lgroups"><ul class="ents mlines">${s.entries.map(line).join('')}</ul></div></div>`;
+  return `<div class="lday mday m-${s.kind}" data-kind-row><div class="d"><span class="dd"><span class="dn">${esc(s.title)}</span></span></div>`
+    + `<div class="lgroups"><ul class="ents mlines">${s.entries.map(line).join('')}</ul></div></div>`;
 }
 
 /** Media (Play): what I read, watched, played — by year, in the Log's clothes, in the order it was written. */

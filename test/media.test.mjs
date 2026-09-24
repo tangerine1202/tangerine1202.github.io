@@ -92,11 +92,11 @@ const site = {
   media: parsed,
 };
 
-test('the Media page is a Log page in shape: year rows, kinds where the dots go', () => {
+test('the Media page is a Log page in shape: year rows, with no emoji under the year', () => {
   const html = media(site);
   assert.match(html, /<h1 class="page-title">Media<\/h1>/);
   assert.match(html, /<div class="lday mday m-year" data-kind-row><div class="d"><span class="dd"><span class="dn">2026<\/span><\/span>/);
-  assert.match(html, /<span class="dots"><span class="mk" data-kind="book"[^>]*>📖<\/span><span class="mk" data-kind="film"/);
+  assert.doesNotMatch(html, /class="dots"/);
 });
 
 test('lines keep the order they were written in, with the day last, out at the right', () => {
