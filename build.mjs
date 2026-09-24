@@ -46,8 +46,8 @@ const theme = {
   motionCss: 'almanac-motion.css',
   fonts: 'https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;1,6..72,400&family=Schibsted+Grotesk:wght@400;500;600&display=swap',
   motion: true,
-  nav: ['project', 'media', 'log', 'about'], // the order they appear in; Contexts pages are still built and reachable by URL
-  ribbonOn: ['log'],
+  nav: ['log', 'media', 'project', 'about'], // the order they appear in; Contexts pages are still built and reachable by URL
+  ribbonOn: [], // the Log once had the ribbon of every recorded day along the bottom
   calendarInYear: true,
   yearMonths: false,
   logInYear: true,
