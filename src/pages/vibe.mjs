@@ -5,10 +5,10 @@ import { prose } from './home.mjs';
 import { vibeDotTrace, VIBE_DOT_TRACE_CSS } from '../vibe-dot-trace.mjs';
 
 // The three kinds of link a project can carry, in the order a title prefers them.
-const LINKS = { demo: '示範', post: '文章', repo: '原始碼' };
+const LINKS = { demo: 'demo', repo: 'source code' };
 const ORDER = Object.keys(LINKS);
 
-/** The one link a title leads to: the demo if there is one, then the post, then the code. */
+/** The one link a title leads to: the demo if there is one, then the code. */
 export function titleHref(links) {
   for (const type of ORDER) {
     const hit = links.find((l) => l.type === type);

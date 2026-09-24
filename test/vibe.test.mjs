@@ -58,12 +58,13 @@ for (const key of ['title', 'date', 'image', 'alt', 'blurb']) {
 }
 
 test('a fourth link fails the build', () => {
-  const four = FULL.replace('context: 記帳\n', '  - { type: post, url: https://a }\n  - { type: repo, url: https://b }\n');
+  const four = FULL.replace('context: 記帳\n', '  - { type: demo, url: https://a }\n  - { type: repo, url: https://b }\n');
   assert.throws(() => parseVibe(four, 'a.md'), /at most 3 links \(found 4\)/);
 });
 
-test('a link type outside demo / repo / post fails the build', () => {
-  assert.throws(() => parseVibe(FULL.replace('type: repo', 'type: video'), 'a.md'), /a\.md.*demo \/ repo \/ post.*video/);
+test('a link type outside demo / repo fails the build, post included', () => {
+  assert.throws(() => parseVibe(FULL.replace('type: repo', 'type: video'), 'a.md'), /a\.md.*demo \/ repo.*video/);
+  assert.throws(() => parseVibe(FULL.replace('type: repo', 'type: post'), 'a.md'), /demo \/ repo \(got "post"\)/);
 });
 
 test('a date that is not YYYY-MM-DD fails the build', () => {
@@ -159,9 +160,8 @@ test('an mp4 plays itself, quietly and on loop — no GIFs', () => {
   assert.match(html, /<video src="\/photos\/vibe-clip\.mp4" aria-label="登錄畫面" muted autoplay loop playsinline>/);
 });
 
-test('the title leads to the demo, then the post, then the code', () => {
-  assert.equal(titleHref([{ type: 'repo', url: 'r' }, { type: 'post', url: 'p' }, { type: 'demo', url: 'd' }]), 'd');
-  assert.equal(titleHref([{ type: 'repo', url: 'r' }, { type: 'post', url: 'p' }]), 'p');
+test('the title leads to the demo, then the code', () => {
+  assert.equal(titleHref([{ type: 'repo', url: 'r' }, { type: 'demo', url: 'd' }]), 'd');
   assert.equal(titleHref([{ type: 'repo', url: 'r' }]), 'r');
   assert.equal(titleHref([]), null);
 });
@@ -172,7 +172,7 @@ test('a project with no links has a title nobody can click', () => {
 
 test('links are one line of words, and they are underlined in the context colour', () => {
   const html = vibe(site, [project({ context: 'Japanese', links: [{ type: 'repo', url: 'https://r' }, { type: 'demo', url: 'https://d' }] })]);
-  assert.match(html, /<p class="vb-links"><a class="lk" href="https:\/\/d"[^>]*>示範<\/a><span class="sep">·<\/span><a class="lk" href="https:\/\/r"[^>]*>原始碼<\/a><\/p>/);
+  assert.match(html, /<p class="vb-links"><a class="lk" href="https:\/\/d"[^>]*>demo<\/a><span class="sep">·<\/span><a class="lk" href="https:\/\/r"[^>]*>source code<\/a><\/p>/);
   assert.match(html, new RegExp(`style="--c:${jp.color}"`));
 });
 

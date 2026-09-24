@@ -121,9 +121,9 @@ context: 航警替代役
 `title` `date` `image` `alt` are required — a missing one fails the build and says which file
 and which field. The card's text is the first paragraph below the front matter, word for word
 (headings, pictures and their `*captions*` are skipped); `blurb` is used only by a file with no
-body, and a file with neither fails the build. `links` is at most three, each `{ type, url }` with `type` one of `demo` / `repo` /
-`post` (shown as 示範 / 原始碼 / 文章, underlined in the project's context colour); the title links to
-the first of them, preferring `demo`, then `post`, then `repo` — unless `page:` names a write-up
+body, and a file with neither fails the build. `links` is at most three, each `{ type, url }` with `type` either `demo` or `repo`
+(shown as demo / source code, underlined in the project's context colour); the title links to
+the first of them, preferring `demo`, then `repo` — unless `page:` names a write-up
 (below), which the title leads to instead. `context` is the `[[wikilink]]` target
 in the daily log; one nobody has recorded only prints a warning.
 

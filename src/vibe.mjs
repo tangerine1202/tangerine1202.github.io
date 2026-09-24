@@ -6,7 +6,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 
 const REQUIRED = ['title', 'date', 'image', 'alt'];
-const LINK_TYPES = ['demo', 'repo', 'post'];
+const LINK_TYPES = ['demo', 'repo'];
 const MAX_LINKS = 3;
 
 // `  - { type: repo, url: https://… }` — the one shape the schema has.
