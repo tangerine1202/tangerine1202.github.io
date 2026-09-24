@@ -314,6 +314,21 @@ a.lab:hover { color: var(--ink); }
 /* The links wear the Home page's context underline, in that project's colour. */
 .vb-links .sep { margin-inline: 10px; color: var(--faint); }
 
+/* ── About ─────────────────────────────────────────────
+   A plain list: each section's name out in the margin, the way the Log keeps its dates, and its
+   items in the column, dates at the right. */
+
+.ab-sec { display: grid; grid-template-columns: var(--margin) minmax(0, 1fr); column-gap: var(--gap); }
+.page-title + .ab-sec { margin-top: 56px; }
+.ab-sec + .ab-sec { margin-top: 56px; }
+.ab-title { margin: 0; font: 500 15px/1.6 var(--sans); color: var(--pencil); }
+.ab-list { margin: 0; padding: 0; list-style: none; max-width: 44em; }
+.ab-list li + li { margin-top: 16px; }
+.ab-main { display: flex; justify-content: space-between; align-items: baseline; gap: 24px; margin: 0; font-size: 17px; }
+.ab-when { flex: none; font-size: 14px; color: var(--pencil); font-variant-numeric: tabular-nums; }
+.ab-detail { margin: 4px 0 0; font-size: 14px; color: var(--pencil); }
+.ab-detail strong, .ab-main strong { font-weight: 600; color: var(--ink); }
+
 /* ── the ribbon ────────────────────────────────────── */
 
 .ribbon {
@@ -351,7 +366,9 @@ a.lab:hover { color: var(--ink); }
   .foot p { margin-left: 0; }
 
   /* Stack the margin above the column. */
-  .l-side, .yr-sec, .month, .p-context main, .sheet { grid-template-columns: minmax(0, 1fr); }
+  .l-side, .yr-sec, .month, .p-context main, .sheet, .ab-sec { grid-template-columns: minmax(0, 1fr); }
+  .ab-title { margin-bottom: 10px; }
+  .ab-main { flex-direction: column; gap: 2px; }
   .yr-sec > *, .yr-sec > .yr, .back, .ctx-head, .facts, .traces, .cdays,
   .sheet .sy, .sheet .date, .sheet .wd, .groups { grid-column: 1; grid-row: auto; position: static; }
   .post { padding-top: 64px; }

@@ -7,6 +7,7 @@ import { density, ridgePath } from './ridge.mjs';
 const NAV = [['year', 'Year'], ['calendar', 'Calendar'], ['contexts', 'Contexts'], ['log', 'Log']];
 const MEDIA = ['media', 'Media']; // only for a theme that says `media: true`
 const VIBE = ['vibe', 'Vibe']; // only for a theme that says `vibe: true`
+const ABOUT = ['about', 'About']; // only for a theme that says `about: true`
 
 /**
  * `ribbon`: false = none, or { span: [from, to], focus: contextId }. Drawn only on the
@@ -14,7 +15,7 @@ const VIBE = ['vibe', 'Vibe']; // only for a theme that says `vibe: true`
  */
 export function layout(site, { title, current, cls = '', body, ribbon: rb = {}, backLabel }) {
   const { url, theme, config } = site;
-  const all = [...NAV, ...(theme.media ? [MEDIA] : []), ...(theme.vibe ? [VIBE] : [])];
+  const all = [...NAV, ...(theme.media ? [MEDIA] : []), ...(theme.vibe ? [VIBE] : []), ...(theme.about ? [ABOUT] : [])];
   // theme.nav is the list and the order; a section it names that the theme hasn't turned on is skipped.
   const sections = theme.nav ? theme.nav.map((key) => all.find(([k]) => k === key)).filter(Boolean) : all;
   const nav = sections.map(([key, label]) => {

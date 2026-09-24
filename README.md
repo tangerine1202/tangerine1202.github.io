@@ -142,6 +142,12 @@ read off the finished model), and nothing else imports them.
 4. Delete the "dot trace" section of `test/vibe.test.mjs` and the two imports it uses at the top.
 5. Afterwards no `DotTrace` or `vibeContextActivity` string is left in the project.
 
+## Writing the About page
+
+`/about/` is `content/about.md`: `## Section` headings, `- item` lines, and indented `- detail` lines
+under an item. An item ending in ` (…)` has that as its dates, shown at the right. Inside a line,
+`**bold**` and `[words](url)` work; a url starting with `/` is a page on this site.
+
 ## Before deploying
 
 Open `dist/` and check it. The log still has health lines that aren't marked `#private`.

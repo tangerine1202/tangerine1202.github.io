@@ -15,6 +15,7 @@ import { media } from './src/pages/media.mjs';
 import { parseMedia } from './src/media.mjs';
 import { vibe } from './src/pages/vibe.mjs';
 import { loadVibe } from './src/vibe.mjs';
+import { about, loadAbout } from './src/pages/about.mjs';
 import { buildPhotos, photoName, jpegSize } from './src/photos.mjs';
 
 const root = path.dirname(fileURLToPath(import.meta.url));
@@ -37,6 +38,7 @@ const started = Date.now();
 //   nowAccent      the nav underline and text selection follow model.now
 //   media          the Media page, from the media log
 //   vibe           the Vibe page, from content/vibe/
+//   about          the About page, from content/about.md
 
 const theme = {
   css: 'almanac.css',
@@ -60,6 +62,7 @@ const theme = {
   play: true,
   media: true,
   vibe: true,
+  about: true,
 };
 
 const { motion } = theme;
@@ -136,6 +139,7 @@ const pages = [
   ['contexts/index.html', contexts(site)],
   ...(theme.media && mediaLog ? [['media/index.html', media(site)]] : []),
   ...(theme.vibe ? [['vibe/index.html', vibe(site, vibeItems)]] : []),
+  ...(theme.about ? [['about/index.html', about(site, loadAbout(at('content/about.md')))]] : []),
   ...[...model.ctx.values()].map((c) => [`c/${c.slug}/index.html`, contextPage(site, c)]),
   ...model.dates.map((d) => [`d/${d}/index.html`, day(site, d)]),
 ];
