@@ -152,16 +152,25 @@
     timer = setTimeout(fn, BLUR_DELAY);
   }
 
-  function init() {
-    const main = document.querySelector('main');
-    if (!main) return;
-    sources = [...main.querySelectorAll(SOURCES)];
-    for (const el of sources) {
+  function bind(scope) {
+    const found = [...scope.querySelectorAll(SOURCES)];
+    sources.push(...found);
+    for (const el of found) {
       el.addEventListener('pointerenter', () => { clearTimeout(timer); focusSource(el); });
       el.addEventListener('focusin', () => { clearTimeout(timer); focusSource(el); });
       el.addEventListener('pointerleave', () => later(() => { if (!anyHovered()) blur(); }));
       el.addEventListener('focusout', () => later(blur));
     }
+  }
+
+  // Days the Log loads later (more.js) join in as they arrive.
+  document.addEventListener('meanwhile:more', (e) => bind(e.detail));
+
+  function init() {
+    const main = document.querySelector('main');
+    if (!main) return;
+    sources = [];
+    bind(main);
     // The Context page is already about one context, so it is in focus from the start.
     sticky = document.querySelector('.ctx-head .dot[data-cid]');
     if (sticky) focusSource(sticky);

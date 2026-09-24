@@ -8,7 +8,7 @@ import config from './meanwhile.config.mjs';
 import { parse } from './src/parse.mjs';
 import { buildModel } from './src/model.mjs';
 import { home, loadPosts } from './src/pages/home.mjs';
-import { year } from './src/pages/year.mjs';
+import { year, logParts } from './src/pages/year.mjs';
 import { contexts, contextPage } from './src/pages/contexts.mjs';
 import { day } from './src/pages/day.mjs';
 import { media } from './src/pages/media.mjs';
@@ -40,6 +40,7 @@ const started = Date.now();
 //   media          the Media page, from the media log
 //   vibe           the Vibe page, from content/vibe/
 //   about          the About page, from content/about.md
+//   lazyLog        the Log shows its newest days and fetches older ones on scroll (more.js)
 
 const theme = {
   css: 'almanac.css',
@@ -56,7 +57,7 @@ const theme = {
   contextGrid: true,
   pathBack: true,
   extraCss: ['play.css'],
-  scripts: ['focus.js', 'zoom.js'],
+  scripts: ['focus.js', 'more.js', 'zoom.js'],
   yearRidge: true,
   linkTrace: true,
   nowAccent: true,
@@ -64,6 +65,7 @@ const theme = {
   media: true,
   vibe: true,
   about: true,
+  lazyLog: true,
 };
 
 const { motion } = theme;
@@ -153,6 +155,8 @@ const pages = [
   ['index.html', home(site, posts)],
   // The Log is the Year page: each year's shape, with that year's days under it.
   ['log/index.html', year(site)],
+  // …and its older days, fetched as the reader scrolls (theme.lazyLog).
+  ...(theme.lazyLog ? logParts(site).flatMap((p) => p.files.map((f) => [`log/${f.name}`, f.html])) : []),
   ['contexts/index.html', contexts(site)],
   ...(theme.media && mediaLog ? [['media/index.html', media(site)]] : []),
   ...(theme.vibe ? [['project/index.html', vibe(site, vibeItems)]] : []),

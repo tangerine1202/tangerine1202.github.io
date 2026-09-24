@@ -290,6 +290,21 @@ a.lab:hover { color: var(--ink); }
 .lmonth { margin-top: 56px; }
 .lmonth > .label { margin: 0 0 8px var(--indent); }
 .lday { display: grid; grid-template-columns: var(--margin) minmax(0, 1fr); column-gap: var(--gap); padding: 22px 0; }
+/* Older days on their way (more.js): grey bars in a day's shape, where the next days will sit. */
+.sk { display: block; height: 14px; border-radius: 3px; background: var(--empty); animation: sk-pulse 1.4s ease-in-out infinite; }
+.sk-day .d { gap: 8px; }
+.sk-n { width: 64px; height: 36px; }
+.sk-w { width: 52px; }
+.sk-day .lgroups { display: grid; gap: 10px; padding-top: 6px; }
+.sk-h { width: 120px; }
+.sk-l { width: min(100%, 420px); }
+.sk-l.short { width: min(70%, 260px); }
+.sk-day + .sk-day .sk { animation-delay: .2s; }
+.log-more.failed .sk { animation: none; opacity: .5; }
+.log-retry { margin: 8px 0 0 var(--indent); padding: 0; border: 0; background: none; font: italic 17px var(--serif); color: var(--pencil); cursor: pointer; }
+.log-retry:hover { color: var(--ink); }
+@keyframes sk-pulse { 50% { opacity: .45; } }
+@media (prefers-reduced-motion: reduce) { .sk { animation: none; } }
 .lg-grp + .lg-grp { margin-top: 18px; }
 .lg-grp h3 { margin-bottom: 4px; font-size: 15px; font-weight: 600; }
 /* Each group wears its colour beside its name, so the legend isn't needed to read it. */

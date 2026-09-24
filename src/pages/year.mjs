@@ -2,7 +2,7 @@ import { esc } from '../util.mjs';
 import { layout, legend, dot, ctxHref, traceSvg, monthAxis } from '../layout.mjs';
 import { weeksGrid } from '../weeks.mjs';
 import { monthsOfYear } from './calendar.mjs';
-import { logMonths } from './log.mjs';
+import { logMonths, logChunks } from './log.mjs';
 
 /** Configured contexts → others with enough days → Other (N) → Uncategorized. */
 function lanesFor(site, year) {
@@ -43,8 +43,30 @@ function lane(site, l, i, year) {
   return `<div class="lane" style="--i:${i}"${l.c ? ` data-cid="${l.c.id}"` : ''}>${label}${trace}</div>`;
 }
 
+/**
+ * The Log's days, a year at a time, split for loading as the reader scrolls: the newest year shows
+ * its first chunk in the page, and every other chunk is a file beside it (log/days-<year>-<n>.html)
+ * that more.js fetches when the skeleton at the end of the days comes near the screen.
+ */
+export function logParts(site) {
+  return site.model.years.map((y, i) => {
+    const chunks = logChunks(site, site.model.dates.filter((d) => d.startsWith(`${y}-`)), 20);
+    const inline = i === 0 ? chunks.shift() ?? '' : '';
+    return { year: y, inline, files: chunks.map((html, n) => ({ name: `days-${y}-${n + 1}.html`, html })) };
+  });
+}
+
+// Grey rows in the shape of a day, where the next days will be; more.js removes it after the last.
+function skeleton(files) {
+  const row = '<div class="lday sk-day" aria-hidden="true"><div class="d"><i class="sk sk-n"></i><i class="sk sk-w"></i></div>'
+    + '<div class="lgroups"><i class="sk sk-h"></i><i class="sk sk-l"></i><i class="sk sk-l short"></i></div></div>';
+  return `<div class="log-more" data-chunks="${files.map((f) => f.name).join(' ')}" role="status" aria-label="Loading older days">${row.repeat(3)}</div>`
+    + '<noscript><p class="quiet-note">Older days need JavaScript to load.</p></noscript>';
+}
+
 export function year(site) {
   const { model, theme } = site;
+  const parts = site.theme.lazyLog ? logParts(site) : [];
   const sections = model.years.map((y) => {
     const { lanes, contexts } = lanesFor(site, y);
     // The whole-year bracket belongs to the lanes alone: with the log underneath, the day rows
@@ -59,7 +81,10 @@ export function year(site) {
     const months = theme.calendarInYear && theme.yearMonths !== false ? `<div class="months">${monthsOfYear(site, y).join('\n')}</div>` : '';
     // The log is not a page of its own here: each year keeps its own days, under its own lanes.
     // No tag over them — the month names are tag enough.
-    const days = theme.logInYear ? logMonths(site, model.dates.filter((d) => d.startsWith(`${y}-`))).html : '';
+    const part = theme.logInYear && site.theme.lazyLog ? parts.find((p) => p.year === y) : null;
+    const days = part
+      ? part.inline + (part.files.length ? skeleton(part.files) : '')
+      : theme.logInYear ? logMonths(site, model.dates.filter((d) => d.startsWith(`${y}-`))).html : '';
     return `<section class="yr-sec"${theme.logInYear ? '' : span} data-back-label="${y}">
 <h1 class="yr">${y}</h1>
 <p class="label">My life, by context</p>

@@ -26,9 +26,11 @@ at rest the page looks as it always did, but looking at a context — a lane, a 
 every dot of that context in date order, ribbon included, and lets the rest fall back; a context with no
 colour of its own borrows the ink while it is the one you are looking at. A year's lane is not a row of
 ticks but a 7-day density ridge in the context's own colour, so it is visible at a glance when something ran
-thick. There are three pages and three tabs, in the order `theme.nav` names them — **Vibe** (`/vibe/`) is the
-small things made fast; **Media** (`/media/`) is the media log; **Log** (`/log/`) is every year, each one
-opening with its lanes and then its days. Home is the brand. Contexts and Day pages are
+thick. There are four tabs, in the order `theme.nav` names them — **Log** (`/log/`) is every year, each one
+opening with its lanes and then its days; **Media** (`/media/`) is the media log; **Project** (`/project/`)
+is the things I made; **About** (`/about/`) is the CV. The Log shows its newest days (at least 20, whole
+months) and fetches older months as the reader scrolls, with a skeleton of grey day rows at the end
+while they load (`theme.lazyLog`, `src/assets/more.js`; the chunks are `log/days-<year>-<n>.html`). Home is the brand. Contexts and Day pages are
 built and reachable, but not in the nav.
 Hovering a word in a Home post grows the little line of dates that word stands for. The accent colour of the
 site — the nav underline and the text selection — is the context of the last two weeks. With "reduce motion"

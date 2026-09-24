@@ -66,7 +66,7 @@ html[data-focus] main .lg-grp:not(.on) .ents { opacity: .35; }
    reads top to bottom as shape first and then sentences. The rows keep the Log page's margin,
    so they break out of the year's text column the way the calendar months used to. */
 
-.yr-sec > .lmonth { grid-column: 1 / -1; }
+.yr-sec > .lmonth, .yr-sec > .log-more, .yr-sec > .log-retry { grid-column: 1 / -1; }
 /* The first month meets the lanes directly: no tag between them, only air. */
 .yr-sec > .lmonth:first-of-type { margin-top: 64px; }
 
