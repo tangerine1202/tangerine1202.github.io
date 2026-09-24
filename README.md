@@ -97,10 +97,11 @@ placeholder; the real photo's size decides. The numbers live at the top of `fit(
 links a word to that context and grows its peek on hover; a context nobody has recorded stays plain text.
 `[words](https://…)` links off the site.
 
-## Writing a Vibe entry
+## Writing a project (the Project tab)
 
-`/vibe/` lists the small things AI helped me make fast — a record of a rhythm, not a portfolio.
-One file per project in `content/vibe/`, front matter only; there is no body.
+`/project/` lists the small things I made — a record of a rhythm, not a portfolio. The files still live in
+`content/vibe/`, since every project so far was vibe coded.
+One file per project in `content/vibe/`: front matter, then the description in your own words below it.
 
 ```markdown
 ---
@@ -115,16 +116,29 @@ context: 航警替代役
 ---
 ```
 
-`title` `date` `image` `alt` `blurb` are required — a missing one fails the build and says which file
-and which field. `links` is at most three, each `{ type, url }` with `type` one of `demo` / `repo` /
+`title` `date` `image` `alt` are required — a missing one fails the build and says which file
+and which field. The card's text is the first paragraph below the front matter, word for word
+(headings, pictures and their `*captions*` are skipped); `blurb` is used only by a file with no
+body, and a file with neither fails the build. `links` is at most three, each `{ type, url }` with `type` one of `demo` / `repo` /
 `post` (shown as 示範 / 原始碼 / 文章, underlined in the project's context colour); the title links to
-the first of them, preferring `demo`, then `post`, then `repo`. `context` is the `[[wikilink]]` target
+the first of them, preferring `demo`, then `post`, then `repo` — unless `page:` names a write-up
+(below), which the title leads to instead. `context` is the `[[wikilink]]` target
 in the daily log; one nobody has recorded only prints a warning.
 
 The blurb is two sentences: what it does, then why I made it. About 80 characters.
 
-Projects are listed newest first, each with its year out in the margin and its month beside it,
-the way the Media page keeps its years. The picture lives in `content/photos/` as `vibe-<slug>.png`, where `<slug>` is the file
+### A write-up page
+
+A longer story behind a project lives in `content/page/<name>.md` and is built at `/project/<name>/`,
+in the Project tab, as a plain article with a `← Project` link back. Add `page: <name>` to the project's front matter to link
+its title there. The file is plain Obsidian markdown: a `# Title` line, paragraphs, and pictures as
+`![[file.png]]` or `![alt](file.png)` from `content/photos/`, each optionally followed by a
+`*caption*` line. `[[Context|words]]` and `[words](url)` link as they do on Home. A `page:` with no
+file, or a picture that isn't there, only prints a warning.
+
+Projects are listed newest first, each a row in the Log's shape: the year out in the margin (from
+`date`), and under it, where the Log keeps the weekday, the kind of project — `kind:` in the front
+matter, `vibe coding` when it names none. Then the title, words and links, with the picture beside them. The picture lives in `content/photos/` as `vibe-<slug>.png`, where `<slug>` is the file
 name, and sits whole — never cropped — in a 16:10 frame, so a tall screenshot and a wide one read
 as one list. A file
 that isn't there yet lays out as a placeholder frame, like a Home photo. For something that has

@@ -124,7 +124,7 @@ function ctxLink(site, name, words, date) {
   return `<a class="lk" href="${ctxHref(site, c)}" data-cid="${c.id}" style="--c:${c.color}">${inside}</a>`;
 }
 
-function prose(site, p, date) {
+export function prose(site, p, date) {
   const out = [];
   let last = 0;
   for (const m of p.matchAll(LINK)) {

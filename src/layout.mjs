@@ -6,7 +6,7 @@ import { density, ridgePath } from './ridge.mjs';
 
 const NAV = [['year', 'Year'], ['calendar', 'Calendar'], ['contexts', 'Contexts'], ['log', 'Log']];
 const MEDIA = ['media', 'Media']; // only for a theme that says `media: true`
-const VIBE = ['vibe', 'Vibe']; // only for a theme that says `vibe: true`
+const VIBE = ['project', 'Project']; // the projects from content/vibe/; only for a theme that says `vibe: true`
 const ABOUT = ['about', 'About']; // only for a theme that says `about: true`
 
 /**

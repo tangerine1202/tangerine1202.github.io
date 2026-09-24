@@ -1,6 +1,7 @@
-import { esc, ymd, shortMonth } from '../util.mjs';
+import { esc } from '../util.mjs';
 import { layout } from '../layout.mjs';
 import { photoName } from '../photos.mjs';
+import { prose } from './home.mjs';
 import { vibeDotTrace, VIBE_DOT_TRACE_CSS } from '../vibe-dot-trace.mjs';
 
 // The three kinds of link a project can carry, in the order a title prefers them.
@@ -35,33 +36,36 @@ function links(site, v) {
   return `<p class="vb-links">${items.join('<span class="sep">·</span>')}</p>`;
 }
 
+// Each project is a row in the Log's shape: its year out in the margin, with what kind of project it is
+// where the Log keeps the weekday; then the title, words and links, and the picture beside them.
 function card(site, v) {
-  const { y, m } = ymd(v.date);
-  const href = titleHref(v.links);
-  const title = href
-    ? `<a href="${esc(href)}" rel="noreferrer">${esc(v.title)}</a>`
-    : esc(v.title);
+  // A project with its own page (content/page/) leads there; otherwise to its first link.
+  const title = v.page
+    ? `<a href="${site.url(`/project/${encodeURI(v.page)}/`)}">${esc(v.title)}</a>`
+    : titleHref(v.links)
+      ? `<a href="${esc(titleHref(v.links))}" rel="noreferrer">${esc(v.title)}</a>`
+      : esc(v.title);
   // The one place the dot trace is used, inside the one switch that turns it off.
   const trace = site.config.features?.vibeDotTrace ? vibeDotTrace(site, v) : '';
-  // The year sits out in the margin where the Media page keeps its own, with the month beside it:
-  // a project is remembered by the month it happened in, not by the day.
-  return `<article class="vb">
-<div class="d"><span class="dd"><span class="mo">${shortMonth(m)}</span> <span class="dn">${y}</span></span></div>
-<div class="vb-body">
-${frame(site, v)}
-<h3 class="vb-title">${title}</h3>
-<p class="vb-blurb">${esc(v.blurb)}</p>
+  return `<article class="post vb">
+<div class="d"><span class="dd"><span class="dn">${v.date.slice(0, 4)}</span></span><span class="wd">${esc(v.kind)}</span></div>
+<div class="vb-main">
+<div class="text">
+<h2 class="title">${title}</h2>
+<div class="prose">${prose(site, v.description ?? v.blurb, v.date)}</div>
 ${links(site, v)}
 ${trace}
+</div>
+<div class="photos">${frame(site, v)}</div>
 </div>
 </article>`;
 }
 
-/** Vibe: the small things AI helped me make, in the order they were made. A record, not a portfolio. */
+/** Project: the small things I made, in the order they were made. A record, not a portfolio. */
 export function vibe(site, items) {
   const style = site.config.features?.vibeDotTrace ? `<style>${VIBE_DOT_TRACE_CSS}</style>\n` : '';
   const body = items.length
-    ? `${style}<h1 class="page-title">Vibe</h1>\n` + items.map((v) => card(site, v)).join('\n')
-    : '<h1 class="page-title">Vibe</h1>\n<p class="quiet-note">Nothing made yet.</p>';
-  return layout(site, { title: 'Vibe', current: 'vibe', cls: 'p-vibe', body, ribbon: false });
+    ? `${style}<h1 class="page-title">Project</h1>\n` + items.map((v) => card(site, v)).join('\n')
+    : '<h1 class="page-title">Project</h1>\n<p class="quiet-note">Nothing made yet.</p>';
+  return layout(site, { title: 'Project', current: 'project', cls: 'p-vibe', body, ribbon: false });
 }

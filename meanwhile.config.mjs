@@ -31,7 +31,7 @@ export default {
   // vibeDotTrace: the last 90 days of a project's context under its Vibe card.
   // See the README, "Removing the Vibe dot trace", for turning it off and for deleting it.
   features: {
-    vibeDotTrace: true,
+    vibeDotTrace: false,
   },
 
   privateTag: '#private',
