@@ -1,0 +1,16 @@
+# Production: blog.alans.dev. The Cloudflare tunnel routes that hostname straight to
+# http://meanwhile:80 on the caddy network — not through Caddy — so the blog hostname
+# can reach this container and nothing else. Deploy with ./deploy.sh.
+services:
+  meanwhile:
+    build: .
+    image: meanwhile:latest
+    restart: unless-stopped
+    container_name: meanwhile
+    hostname: meanwhile
+    networks:
+      - caddy
+
+networks:
+  caddy:
+    external: true
