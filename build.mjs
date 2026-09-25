@@ -41,6 +41,7 @@ const started = Date.now();
 //   vibe           the Vibe page, from content/vibe/
 //   about          the About page, from content/about.md
 //   lazyLog        the Log shows its newest days and fetches older ones on scroll (more.js)
+//   logDays        false = the Log is its years' lanes only, without the days under them
 
 const theme = {
   css: 'almanac.css',
@@ -57,7 +58,7 @@ const theme = {
   contextGrid: true,
   pathBack: true,
   extraCss: ['play.css'],
-  scripts: ['focus.js', 'more.js', 'zoom.js'],
+  scripts: ['focus.js', 'zoom.js'],
   yearRidge: true,
   linkTrace: true,
   nowAccent: true,
@@ -65,7 +66,8 @@ const theme = {
   media: true,
   vibe: true,
   about: true,
-  lazyLog: true,
+  lazyLog: false,
+  logDays: false,
 };
 
 const { motion } = theme;

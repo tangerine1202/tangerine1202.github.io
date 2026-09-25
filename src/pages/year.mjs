@@ -82,8 +82,8 @@ export function year(site) {
     // The log is not a page of its own here: each year keeps its own days, under its own lanes.
     // No tag over them — the month names are tag enough.
     const part = theme.logInYear && site.theme.lazyLog ? parts.find((p) => p.year === y) : null;
-    const days = part
-      ? part.inline + (part.files.length ? skeleton(part.files) : '')
+    const days = theme.logDays === false ? ''
+      : part ? part.inline + (part.files.length ? skeleton(part.files) : '')
       : theme.logInYear ? logMonths(site, model.dates.filter((d) => d.startsWith(`${y}-`))).html : '';
     return `<section class="yr-sec"${theme.logInYear ? '' : span} data-back-label="${y}">
 <h1 class="yr">${y}</h1>
