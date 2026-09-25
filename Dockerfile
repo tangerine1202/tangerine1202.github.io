@@ -3,6 +3,10 @@
 # so editing files or running `npm run dev` doesn't touch production until the next deploy.
 
 FROM node:22-bookworm-slim AS build
+# deb.debian.org (Fastly) crawls at ~0.1 MB/s over IPv4 from this network, and containers only have IPv4;
+# the NCHC mirror in Taiwan runs at ~7 MB/s. It has no debian-security, so that one is left as it is.
+ARG DEBIAN_MIRROR=http://ftp.tw.debian.org/debian
+RUN sed -i "s|http://deb.debian.org/debian$|$DEBIAN_MIRROR|" /etc/apt/sources.list.d/debian.sources
 RUN apt-get update && apt-get install -y --no-install-recommends ffmpeg && rm -rf /var/lib/apt/lists/*
 WORKDIR /app
 COPY . .
