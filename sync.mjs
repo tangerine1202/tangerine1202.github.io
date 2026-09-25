@@ -1,4 +1,4 @@
-// vault → content/daily-log.md, then build both versions.
+// vault → content/daily-log.md → imported into content/log.json, then build.
 import fs from 'node:fs';
 import path from 'node:path';
 import { spawnSync } from 'node:child_process';
@@ -15,6 +15,8 @@ if (!fs.existsSync(config.vaultLog)) {
 fs.mkdirSync(path.join(root, path.dirname(config.log)), { recursive: true });
 fs.copyFileSync(config.vaultLog, path.join(root, config.log));
 console.log(`✓ copied ${config.vaultLog} → ${config.log}`);
+const imported = spawnSync(process.execPath, ['logdata.mjs', 'import', 'daily-log', config.log], { cwd: root, stdio: 'inherit' });
+if (imported.status !== 0) process.exit(imported.status ?? 1);
 if (config.media && fs.existsSync(config.vaultMedia)) {
   fs.copyFileSync(config.vaultMedia, path.join(root, config.media));
   console.log(`✓ copied ${config.vaultMedia} → ${config.media}`);

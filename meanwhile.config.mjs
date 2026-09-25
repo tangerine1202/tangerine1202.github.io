@@ -7,6 +7,8 @@ export default {
   vaultLog: process.env.MEANWHILE_VAULT_LOG
     ?? path.join(os.homedir(), 'Library/Mobile Documents/iCloud~md~obsidian/Documents/Vault/daily-log.md'),
   log: 'content/daily-log.md',
+  // What the site's log is built from: the daily log and any other source, as data (logdata.mjs).
+  data: 'content/log.json',
   // The media log (books, films, …) sits beside this package in the repo. Override with MEANWHILE_VAULT_MEDIA.
   vaultMedia: process.env.MEANWHILE_VAULT_MEDIA ?? path.join(path.dirname(fileURLToPath(import.meta.url)), '..', 'media-log.md'),
   media: 'content/media-log.md',

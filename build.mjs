@@ -5,7 +5,6 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import config from './meanwhile.config.mjs';
-import { parse } from './src/parse.mjs';
 import { buildModel } from './src/model.mjs';
 import { home, loadPosts } from './src/pages/home.mjs';
 import { year, logParts } from './src/pages/year.mjs';
@@ -18,6 +17,7 @@ import { loadVibe } from './src/vibe.mjs';
 import { about, loadAbout } from './src/pages/about.mjs';
 import { page, loadPages } from './src/pages/page.mjs';
 import { buildPhotos, photoName, jpegSize } from './src/photos.mjs';
+import { load as loadData, toParsed } from './src/logdata.mjs';
 
 const root = path.dirname(fileURLToPath(import.meta.url));
 const at = (...p) => path.join(root, ...p);
@@ -73,13 +73,16 @@ const theme = {
 const { motion } = theme;
 const out = at('dist');
 
-const logFile = at(config.log);
-if (!fs.existsSync(logFile)) {
-  console.error(`✗ ${config.log} not found. Run "npm run sync" to copy it from the vault.`);
+// The log is built from data (content/log.json), not from the daily log directly: the daily log is
+// one source imported into it (node logdata.mjs import daily-log content/daily-log.md), beside
+// whatever else is added there.
+const dataFile = at(config.data);
+if (!fs.existsSync(dataFile)) {
+  console.error(`✗ ${config.data} not found. Import the daily log into it: node logdata.mjs import daily-log ${config.log}`);
   process.exit(1);
 }
 
-const parsed = parse(fs.readFileSync(logFile, 'utf8'), config);
+const parsed = toParsed(loadData(dataFile), config);
 const model = buildModel(parsed, config);
 const base = config.base.replace(/\/$/, '');
 const photosDir = at('content/photos');

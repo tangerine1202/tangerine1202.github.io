@@ -61,6 +61,36 @@ This needs `ffmpeg` on PATH (`apt install ffmpeg`); without it, the build stops.
 in `.cache/`, so rebuilds only re-encode what changed. The size and quality are `MAX` and `QUALITY`
 at the top of `src/photos.mjs`; changing them starts a fresh cache.
 
+## The log's data
+
+The site's log is built from `content/log.json`, not from the daily log directly. The daily log is one
+*source* imported into it; other sources, and entries typed by hand, sit beside it. Each entry is
+`{ id, date, context, text, sub, source }`.
+
+```bash
+node logdata.mjs import daily-log content/daily-log.md   # replace the daily-log source (other sources untouched)
+node logdata.mjs import calendar some-other-log.md       # another markdown log, as its own source
+node logdata.mjs add 2026-09-25 "寫了什麼" --context Japanese   # source "manual" unless --source says otherwise
+node logdata.mjs list --date 2026-09-25                 # also --source, --context
+node logdata.mjs edit <id> --text "…"                  # also --date, --context
+node logdata.mjs rm <id>
+node logdata.mjs serve                                  # the edit page, on 172.17.0.1:4325
+```
+
+An imported source is replaced whole on every import, so its entries are read-only here: fix them in
+the log they came from and import again. What is added here (`manual`, or any other name that isn't
+an imported source) is edited and removed here, and no import touches it. The site's rules still
+apply to imported logs: `#private` lines, `privateContexts` and `mapEntry`. The dev server watches
+`content/`, so every save rebuilds the site. `npm run sync` imports the daily log after copying it.
+
+Converting the daily log is the AI's job each time the log changes; `CLAUDE.md` says how.
+
+The edit page (`src/edit-page.html`) lists every entry by day, with search and filters, adds entries and
+edits or deletes the ones added here. It listens only on the docker bridge, so it is reachable only
+through Caddy, at `/meanwhile-edit/`, behind a login of its own (`~/host/caddy/caddy/sites/meanwhile-edit.caddy`):
+someone who can read the site can't change its data. Every change must carry an `x-meanwhile-edit`
+header, which a page on another site can't send, so a remembered password can't be used from elsewhere.
+
 ## Content is not in git
 
 Everything under `content/` — the daily log, the media log, Home posts, Vibe entries and photos — is

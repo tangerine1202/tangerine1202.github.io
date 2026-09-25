@@ -1,0 +1,197 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Log data · Meanwhile</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;1,6..72,400&family=Schibsted+Grotesk:wght@400;500;600&display=swap">
+<style>
+  :root {
+    --ink: #1B1E27; --pencil: #676C77; --faint: #A9ADB4; --empty: #E6E8E4; --paper: #F4F4F2; --accent: #0072B2; --warn: #B3261E;
+    --serif: "Newsreader", "Songti TC", "Noto Serif TC", Georgia, serif;
+    --sans: "Schibsted Grotesk", -apple-system, BlinkMacSystemFont, "PingFang TC", "Noto Sans TC", sans-serif;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--paper); color: var(--ink); font: 15px/1.5 var(--sans); }
+  .wrap { max-width: 960px; margin: 0 auto; padding: 0 24px 96px; }
+  header { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; padding: 28px 0 8px; }
+  .brand { font: italic 400 24px/1 var(--serif); }
+  .counts { color: var(--pencil); font-size: 13px; }
+  h1 { margin: 40px 0 6px; font: 500 40px/1 var(--sans); letter-spacing: -.03em; }
+  .lede { margin: 0 0 28px; color: var(--pencil); font: italic 16px/1.5 var(--serif); max-width: 40em; }
+  form.add, .filters { display: grid; gap: 10px; align-items: end; }
+  form.add { grid-template-columns: 150px 170px minmax(0, 1fr) 130px auto; margin-bottom: 28px; }
+  .filters { grid-template-columns: minmax(0, 1fr) 170px 170px; margin-bottom: 8px; }
+  label { display: grid; gap: 4px; font-size: 12px; color: var(--pencil); }
+  input, select, button { font: inherit; color: inherit; }
+  input, select { width: 100%; padding: 8px 10px; border: 1px solid #D5D8D2; border-radius: 4px; background: #fff; }
+  input:focus, select:focus { outline: 2px solid var(--accent); outline-offset: -1px; border-color: transparent; }
+  button { padding: 8px 14px; border: 0; border-radius: 4px; background: var(--ink); color: #fff; cursor: pointer; }
+  button.quiet { padding: 2px 6px; background: none; color: var(--pencil); font-size: 13px; }
+  button.quiet:hover { color: var(--ink); text-decoration: underline; }
+  button.danger:hover { color: var(--warn); }
+  #status { min-height: 22px; margin: 0 0 8px; font-size: 13px; color: var(--pencil); }
+  #status.err { color: var(--warn); }
+  .day { display: grid; grid-template-columns: 130px minmax(0, 1fr); gap: 24px; padding: 16px 0; border-top: 1px solid #E2E4DF; }
+  .date { font: 500 15px/1.4 var(--sans); }
+  .date small { display: block; color: var(--pencil); font: italic 13px var(--serif); }
+  ul { list-style: none; margin: 0; padding: 0; }
+  li { display: grid; grid-template-columns: 150px minmax(0, 1fr) auto; gap: 12px; align-items: baseline; padding: 4px 0; }
+  li .ctx { color: var(--pencil); font-size: 13px; overflow-wrap: anywhere; }
+  li .txt { overflow-wrap: anywhere; }
+  li .txt .sub { display: block; color: var(--pencil); font-size: 13px; }
+  li .meta { display: flex; gap: 4px; align-items: baseline; white-space: nowrap; }
+  .src { padding: 1px 6px; border-radius: 3px; background: var(--empty); color: var(--pencil); font-size: 12px; }
+  .src.mine { background: #DCEBF5; color: var(--accent); }
+  li.editing { grid-template-columns: 150px minmax(0, 1fr) 110px auto; }
+  li.editing input { padding: 4px 8px; }
+  .none { padding: 24px 0; color: var(--pencil); font: italic 16px var(--serif); }
+  @media (max-width: 760px) {
+    form.add, .filters { grid-template-columns: 1fr 1fr; }
+    form.add label.text { grid-column: 1 / -1; }
+    .day { grid-template-columns: 1fr; gap: 6px; }
+    li, li.editing { grid-template-columns: 1fr; gap: 2px; padding: 8px 0; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header><span class="brand">Meanwhile</span><span class="counts" id="counts"></span></header>
+  <h1>Log data</h1>
+  <p class="lede">What the site's log is built from. Imported sources (the daily log) are read-only here: edit them where they
+    come from, and the next import brings the change. Entries added here are yours to edit, and no import touches them.
+    The site rebuilds itself a moment after each change.</p>
+
+  <form class="add" id="add" autocomplete="off">
+    <label>Date<input name="date" type="date" required></label>
+    <label>Context<input name="context" list="contexts" placeholder="(none)"></label>
+    <label class="text">Text<input name="text" required placeholder="What happened"></label>
+    <label>Source<input name="source" list="sources" value="manual" required pattern="[a-z0-9][a-z0-9-]*"></label>
+    <button type="submit">Add</button>
+  </form>
+
+  <div class="filters">
+    <label>Search<input id="q" type="search" placeholder="Words, a context, a date"></label>
+    <label>Source<select id="fsource"><option value="">All sources</option></select></label>
+    <label>Context<select id="fctx"><option value="">All contexts</option></select></label>
+  </div>
+  <p id="status" role="status"></p>
+  <div id="list"></div>
+</div>
+<datalist id="contexts"></datalist>
+<datalist id="sources"></datalist>
+
+<script>
+(() => {
+  const $ = (s) => document.querySelector(s);
+  const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
+  let state = { entries: [], contexts: [], sources: [], imported: [] };
+  let editing = null;
+
+  function say(msg, err) {
+    const s = $('#status');
+    s.textContent = msg;
+    s.className = err ? 'err' : '';
+  }
+
+  // Every change carries a header a page on another site cannot send without asking first.
+  async function call(method, url, body) {
+    const r = await fetch(url, {
+      method,
+      headers: { 'content-type': 'application/json', 'x-meanwhile-edit': '1' },
+      body: body ? JSON.stringify(body) : undefined,
+    });
+    const out = await r.json().catch(() => ({}));
+    if (!r.ok) throw new Error(out.error || r.statusText);
+    return out;
+  }
+
+  async function refresh() {
+    state = await (await fetch('api/entries')).json();
+    const opts = (list) => list.map((v) => `<option value="${esc(v)}">${esc(v)}</option>`).join('');
+    $('#contexts').innerHTML = opts(state.contexts);
+    $('#sources').innerHTML = opts(state.sources);
+    const keep = (sel, first, list) => { const v = sel.value; sel.innerHTML = `<option value="">${first}</option>` + opts(list); sel.value = list.includes(v) ? v : ''; };
+    keep($('#fsource'), 'All sources', state.sources);
+    keep($('#fctx'), 'All contexts', state.contexts);
+    const per = state.sources.map((s) => `${state.entries.filter((e) => e.source === s).length} ${s}`);
+    $('#counts').textContent = per.join(' · ');
+    render();
+  }
+
+  const weekday = (d) => new Date(`${d}T00:00:00`).toLocaleDateString('en-US', { weekday: 'long' });
+
+  function row(e) {
+    const mine = !state.imported.includes(e.source);
+    if (editing === e.id) {
+      return `<li class="editing" data-id="${esc(e.id)}">
+        <input name="context" list="contexts" value="${esc(e.context)}" placeholder="(none)" aria-label="Context">
+        <input name="text" value="${esc(e.text)}" aria-label="Text">
+        <input name="date" type="date" value="${esc(e.date)}" aria-label="Date">
+        <span class="meta"><button class="quiet" data-act="save">Save</button><button class="quiet" data-act="cancel">Cancel</button></span></li>`;
+    }
+    const sub = (e.sub || []).map((s) => `<span class="sub">${'· '.repeat(s.depth)}${esc(s.text)}</span>`).join('');
+    const acts = mine ? `<button class="quiet" data-act="edit">Edit</button><button class="quiet danger" data-act="delete">Delete</button>` : '';
+    return `<li data-id="${esc(e.id)}"><span class="ctx">${esc(e.context || '—')}</span><span class="txt">${esc(e.text)}${sub}</span>
+      <span class="meta"><span class="src${mine ? ' mine' : ''}">${esc(e.source)}</span>${acts}</span></li>`;
+  }
+
+  function render() {
+    const q = $('#q').value.trim().toLowerCase();
+    const fs = $('#fsource').value, fc = $('#fctx').value;
+    const shown = state.entries.filter((e) => (!fs || e.source === fs) && (!fc || e.context === fc)
+      && (!q || [e.date, e.context, e.text, ...(e.sub || []).map((s) => s.text)].join(' ').toLowerCase().includes(q)));
+    const days = new Map();
+    for (const e of shown) (days.get(e.date) || days.set(e.date, []).get(e.date)).push(e);
+    const html = [...days].sort((a, b) => b[0].localeCompare(a[0]))
+      .map(([d, es]) => `<section class="day"><div class="date">${d}<small>${weekday(d)}</small></div><ul>${es.map(row).join('')}</ul></section>`);
+    $('#list').innerHTML = html.join('') || '<p class="none">Nothing matches.</p>';
+  }
+
+  $('#add').addEventListener('submit', async (ev) => {
+    ev.preventDefault();
+    const f = new FormData(ev.target);
+    try {
+      await call('POST', 'api/entries', Object.fromEntries(f));
+      ev.target.text.value = '';
+      say('Added.');
+      await refresh();
+      ev.target.text.focus();
+    } catch (err) { say(err.message, true); }
+  });
+
+  $('#list').addEventListener('click', async (ev) => {
+    const btn = ev.target.closest('button[data-act]');
+    if (!btn) return;
+    const li = btn.closest('li');
+    const id = li.dataset.id;
+    const e = state.entries.find((x) => x.id === id);
+    try {
+      if (btn.dataset.act === 'edit') { editing = id; render(); li.parentElement.querySelector(`li[data-id="${CSS.escape(id)}"] input[name="text"]`)?.focus(); }
+      if (btn.dataset.act === 'cancel') { editing = null; render(); }
+      if (btn.dataset.act === 'save') {
+        const v = (n) => li.querySelector(`input[name="${n}"]`).value;
+        await call('PUT', `api/entries/${encodeURIComponent(id)}`, { date: v('date'), context: v('context'), text: v('text') });
+        editing = null; say('Saved.'); await refresh();
+      }
+      if (btn.dataset.act === 'delete' && confirm(`Delete "${e.text}" from ${e.date}?`)) {
+        await call('DELETE', `api/entries/${encodeURIComponent(id)}`);
+        say('Deleted.'); await refresh();
+      }
+    } catch (err) { say(err.message, true); }
+  });
+  $('#list').addEventListener('keydown', (ev) => {
+    if (!ev.target.closest('li.editing')) return;
+    if (ev.key === 'Enter') ev.target.closest('li').querySelector('[data-act="save"]').click();
+    if (ev.key === 'Escape') { editing = null; render(); }
+  });
+  for (const el of ['#q', '#fsource', '#fctx']) $(el).addEventListener('input', render);
+
+  $('#add').date.value = new Date(Date.now() - new Date().getTimezoneOffset() * 6e4).toISOString().slice(0, 10);
+  refresh().catch((err) => say(`Could not load the data: ${err.message}`, true));
+})();
+</script>
+</body>
+</html>
