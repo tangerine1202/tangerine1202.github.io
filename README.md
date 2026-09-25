@@ -205,3 +205,20 @@ under an item. An item ending in ` (…)` has that as its dates, shown at the ri
 ## Before deploying
 
 Open `dist/` and check it. The log still has health lines that aren't marked `#private`.
+
+## Deploying
+
+Production is the `meanwhile` container (`Dockerfile`, `docker-compose.yml`), served at https://blog.alans.dev.
+It holds a built snapshot of this folder, `content/` included, and mounts nothing from the host, so
+editing files or running `npm run dev` never changes it. To publish what is here now:
+
+```bash
+./deploy.sh   # runs the tests and the build inside Docker, then swaps the container
+```
+
+If the tests or the build fail, the running container is left as it was. `restart: unless-stopped`
+brings it back after a crash or a reboot.
+
+The Cloudflare tunnel routes `blog.alans.dev` straight to `http://meanwhile:80` on the `caddy` docker
+network, not through Caddy, so that hostname can reach this container and nothing else on the machine.
+`npm run dev` (port 4324) stays the local preview.
