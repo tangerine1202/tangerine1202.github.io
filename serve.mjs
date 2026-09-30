@@ -40,11 +40,17 @@ function serve(dir, port, name) {
       }
       file = path.join(file, 'index.html');
     }
+    let status = 200;
     if (!fs.existsSync(file)) {
-      res.writeHead(404, { 'Content-Type': 'text/plain; charset=utf-8' }).end(`Not found: ${rel}`);
-      return;
+      // Like production: the site's own 404 page, with a 404 status.
+      file = path.join(dir, '404.html');
+      if (!fs.existsSync(file)) {
+        res.writeHead(404, { 'Content-Type': 'text/plain; charset=utf-8' }).end(`Not found: ${rel}`);
+        return;
+      }
+      status = 404;
     }
-    res.writeHead(200, { 'Content-Type': TYPES[path.extname(file)] ?? 'application/octet-stream', 'Cache-Control': 'no-store' });
+    res.writeHead(status, { 'Content-Type': TYPES[path.extname(file)] ?? 'application/octet-stream', 'Cache-Control': 'no-store' });
     fs.createReadStream(file).pipe(res);
   }).listen(port, () => console.log(`  ${name.padEnd(10)} http://localhost:${port}`));
 }

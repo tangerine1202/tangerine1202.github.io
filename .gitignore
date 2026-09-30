@@ -14,3 +14,5 @@ dist/
 .cache/
 dist-motion/
 dist-almanac/
+.deploy/
+.wrangler/

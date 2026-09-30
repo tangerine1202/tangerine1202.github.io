@@ -1,0 +1,5 @@
+# Response headers for Workers static assets (read by Cloudflare, not served). See wrangler.jsonc.
+# Photos are not renamed when they change, so a replaced photo shows the old one for up to a day
+# (rename it, or wait). In return, a photo is not re-checked on every visit.
+/photos/*
+  Cache-Control: public, max-age=86400

@@ -16,6 +16,7 @@ import { vibe } from './src/pages/vibe.mjs';
 import { loadVibe } from './src/vibe.mjs';
 import { about, loadAbout } from './src/pages/about.mjs';
 import { page, loadPages } from './src/pages/page.mjs';
+import { notFound } from './src/pages/notfound.mjs';
 import { buildPhotos, photoName, jpegSize } from './src/photos.mjs';
 import { load as loadData, toParsed } from './src/logdata.mjs';
 
@@ -158,6 +159,8 @@ site.photoSize = (src) => {
 
 const pages = [
   ['index.html', home(site, posts)],
+  // Shown, with a 404 status, for any address that has no page (wrangler.jsonc: not_found_handling).
+  ['404.html', notFound(site)],
   // The Log is the Year page: each year's shape, with that year's days under it.
   ['log/index.html', year(site)],
   // …and its older days, fetched as the reader scrolls (theme.lazyLog).
@@ -178,6 +181,7 @@ for (const [file, html] of pages) {
 fs.copyFileSync(at('src/assets', theme.css), path.join(out, 'style.css'));
 if (motion) fs.copyFileSync(at('src/assets', theme.motionCss), path.join(out, 'motion.css'));
 for (const f of theme.extraCss ?? []) fs.copyFileSync(at('src/assets', f), path.join(out, f));
+fs.copyFileSync(at('src/assets/_headers'), path.join(out, '_headers'));
 
 for (const w of warnings) console.warn(`  ! ${w}`);
 console.log(`✓ ${pages.length} pages → ${path.basename(out)}/ in ${Date.now() - started}ms`);

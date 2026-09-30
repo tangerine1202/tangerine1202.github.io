@@ -1,6 +1,7 @@
-# Production image: a snapshot of the site, built once and served as static files.
-# Built by deploy.sh from this folder, content/ included; nothing on the host is mounted,
-# so editing files or running `npm run dev` doesn't touch production until the next deploy.
+# Production build: runs the tests, then builds the site once, with content/ included.
+# deploy.sh takes the `site` stage out as plain files (docker build --output) and uploads them to
+# Cloudflare Workers as static assets. Nothing on the host is mounted, so editing files or running
+# `npm run dev` doesn't touch production until the next deploy.
 
 FROM node:22-bookworm-slim AS build
 # deb.debian.org (Fastly) crawls at ~0.1 MB/s over IPv4 from this network, and containers only have IPv4;
@@ -13,7 +14,6 @@ COPY . .
 ENV TZ=Asia/Taipei MEANWHILE_BASE=/
 RUN node --test test/*.test.mjs && node build.mjs
 
-FROM caddy:2-alpine
-COPY --from=build /app/dist /srv
-EXPOSE 80
-CMD ["caddy", "file-server", "--root", "/srv", "--listen", ":80"]
+# Only the built site leaves the build: content/ and the code stay behind in the stage above.
+FROM scratch AS site
+COPY --from=build /app/dist /

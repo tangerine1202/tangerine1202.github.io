@@ -208,17 +208,21 @@ Open `dist/` and check it. The log still has health lines that aren't marked `#p
 
 ## Deploying
 
-Production is the `meanwhile` container (`Dockerfile`, `docker-compose.yml`), served at https://blog.alans.dev.
-It holds a built snapshot of this folder, `content/` included, and mounts nothing from the host, so
-editing files or running `npm run dev` never changes it. To publish what is here now:
+Production is a Cloudflare Worker named `meanwhile` that serves the built site as static assets
+(`wrangler.jsonc`), at https://blog.alans.dev. It holds a built snapshot of this folder, `content/`
+included, so editing files or running `npm run dev` never changes it. To publish what is here now:
 
 ```bash
-./deploy.sh   # runs the tests and the build inside Docker, then swaps the container
+./deploy.sh   # runs the tests and the build inside Docker, then uploads the result
 ```
 
-If the tests or the build fail, the running container is left as it was. `restart: unless-stopped`
-brings it back after a crash or a reboot.
+`deploy.sh` builds with the `Dockerfile` (base `/`), takes the built site out to `.deploy/site/`, and runs
+`wrangler deploy` with the API token in `~/.config/cloudflare/api-token`; it needs Docker and node. If the
+tests or the build fail, nothing is uploaded and the live site is as it was. A new version takes about half
+a minute to reach every Cloudflare location, and until then some visitors still get the old one.
 
-The Cloudflare tunnel routes `blog.alans.dev` straight to `http://meanwhile:80` on the `caddy` docker
-network, not through Caddy, so that hostname can reach this container and nothing else on the machine.
-`npm run dev` (port 4324) stays the local preview.
+Any address with no page gets `404.html` (`src/pages/notfound.mjs`), with a 404 status. `npm run dev`
+(port 4324) does the same, and stays the local preview.
+
+`blog.alans.dev` is a Custom Domain of the Worker, and the only address it has: `workers.dev` and per-version
+preview URLs are off in `wrangler.jsonc`.
