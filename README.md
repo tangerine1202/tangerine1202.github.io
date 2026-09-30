@@ -201,6 +201,7 @@ read off the finished model), and nothing else imports them.
 `/about/` is `content/about.md`: `## Section` headings, `- item` lines, and indented `- detail` lines
 under an item. An item ending in ` (…)` has that as its dates, shown at the right. Inside a line,
 `**bold**` and `[words](url)` work; a url starting with `/` is a page on this site.
+A `.pdf` placed in `content/` (the CV) is published at the site root, so `[Resume](/cv.pdf)` links to `content/cv.pdf`.
 
 ## Before deploying
 

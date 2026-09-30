@@ -182,6 +182,8 @@ fs.copyFileSync(at('src/assets', theme.css), path.join(out, 'style.css'));
 if (motion) fs.copyFileSync(at('src/assets', theme.motionCss), path.join(out, 'motion.css'));
 for (const f of theme.extraCss ?? []) fs.copyFileSync(at('src/assets', f), path.join(out, f));
 fs.copyFileSync(at('src/assets/_headers'), path.join(out, '_headers'));
+// A PDF in content/ (the CV) is published at the site root, for About to link to: /cv.pdf.
+for (const f of fs.readdirSync(at('content')).filter((n) => n.endsWith('.pdf'))) fs.copyFileSync(at('content', f), path.join(out, f));
 
 for (const w of warnings) console.warn(`  ! ${w}`);
 console.log(`✓ ${pages.length} pages → ${path.basename(out)}/ in ${Date.now() - started}ms`);
