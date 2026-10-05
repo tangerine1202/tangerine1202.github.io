@@ -19,6 +19,10 @@ function build() {
   for (const [args] of VARIANTS) spawnSync(process.execPath, ['build.mjs', ...args], { cwd: root, stdio: 'inherit' });
 }
 
+// Only the docker bridge, like the log editor: Caddy (alans.dev/meanwhile, behind Access) is the way in.
+// Listening on every interface would put the unreleased log on the open internet.
+const HOST = '172.17.0.1';
+
 function serve(dir, port, name) {
   http.createServer((req, res) => {
     let rel;
@@ -52,7 +56,7 @@ function serve(dir, port, name) {
     }
     res.writeHead(status, { 'Content-Type': TYPES[path.extname(file)] ?? 'application/octet-stream', 'Cache-Control': 'no-store' });
     fs.createReadStream(file).pipe(res);
-  }).listen(port, () => console.log(`  ${name.padEnd(10)} http://localhost:${port}`));
+  }).listen(port, HOST, () => console.log(`  ${name.padEnd(10)} http://${HOST}:${port}`));
 }
 
 build();

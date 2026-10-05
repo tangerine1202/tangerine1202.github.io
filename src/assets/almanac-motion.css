@@ -112,14 +112,4 @@
 
   html.enter .p-year .lane svg { animation: vt-draw .9s var(--ease) both; animation-delay: calc(var(--i, 0) * 60ms + .15s); }
   html.enter .p-context .weeks .cell:not(.out) { animation: vt-cell .4s var(--ease) both; animation-delay: calc(var(--w, 0) * 11ms + .3s); }
-
-  /* ── scroll-driven: Home photos open beside the words (Chrome, Safari 26+) ── */
-
-  @supports (animation-timeline: view()) {
-    @keyframes vt-unfold-r { from { clip-path: inset(0 80% 0 0); } to { clip-path: inset(0 0 0 0); } }
-    @keyframes vt-unfold-c { from { clip-path: inset(0 40% 0 40%); } to { clip-path: inset(0 0 0 0); } }
-    .post .frame { animation: vt-unfold-r linear both; animation-timeline: view(); animation-range: entry 0% entry 90%; }
-    .l-center .frame { animation-name: vt-unfold-c; }
-    .l-pair .photo + .photo .frame { animation-range: entry 15% entry 100%; }
-  }
 }

@@ -9,7 +9,7 @@ Design: `../meanwhile.md` · Build: `../meanwhile-mvp.md` · Motion: `../meanwhi
 
 | Output | Command | Dev URL |
 |---|---|---|
-| `dist/` | `node build.mjs` | http://localhost:4324 |
+| `dist/` | `node build.mjs` | https://alans.dev/meanwhile/ (the dev server's 172.17.0.1:4324, through Caddy) |
 
 Four versions were built from this codebase while the design was being decided — no motion, motion,
 the Almanac, and the Almanac plus the play layer. Only the last one is built now; the others' stylesheets
@@ -37,7 +37,8 @@ site — the nav underline and the text selection — is the context of the last
 on, the focus still works without animation and the rest is static.
 
 ```bash
-npm run dev     # builds the site, serves it on http://localhost:4324, rebuilds on change
+npm run dev     # builds the site for /meanwhile/, serves it on 172.17.0.1:4324 for Caddy
+                # (https://alans.dev/meanwhile/), rebuilds on change
 npm run build   # build into dist/
 npm run sync    # copy the logs from the vault (config: vaultLog / MEANWHILE_VAULT_LOG, vaultMedia / MEANWHILE_VAULT_MEDIA), then build
 npm test
@@ -223,7 +224,7 @@ tests or the build fail, nothing is uploaded and the live site is as it was. A n
 a minute to reach every Cloudflare location, and until then some visitors still get the old one.
 
 Any address with no page gets `404.html` (`src/pages/notfound.mjs`), with a 404 status. `npm run dev`
-(port 4324) does the same, and stays the local preview.
+(port 4324, on the docker bridge only, so open it at alans.dev/meanwhile/) does the same, and stays the preview.
 
 `blog.alans.dev` is a Custom Domain of the Worker, and the only address it has: `workers.dev` and per-version
 preview URLs are off in `wrangler.jsonc`.

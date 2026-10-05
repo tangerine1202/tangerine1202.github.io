@@ -6,7 +6,7 @@
   "engines": { "node": ">=20" },
   "scripts": {
     "build": "node build.mjs",
-    "dev": "node serve.mjs",
+    "dev": "MEANWHILE_BASE=/meanwhile/ node serve.mjs",
     "sync": "node sync.mjs",
     "test": "node --test test/*.test.mjs"
   }
