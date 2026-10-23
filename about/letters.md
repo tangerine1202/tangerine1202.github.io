@@ -1,5 +1,6 @@
 ---
 description: 生活紀錄，類似 Twitter 貼文
+hidden: true
 ---
 
 # Letters

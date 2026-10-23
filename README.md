@@ -1,5 +1,9 @@
 # Overview
 
+The blog has moved to [https://blog.alans.dev](https://blog.alans.dev/).
+
+\---
+
 The blog of a person who interesting in 3D computer vision and robotics.&#x20;
 
 You can find me at:

@@ -1,3 +1,7 @@
+---
+hidden: true
+---
+
 # CV
 
 * Mail: [me@alans.dev](mailto:me@alans.dev)
